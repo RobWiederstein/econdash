@@ -33,7 +33,7 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
 ##................................................................
 
 footer <- shinydashboardPlus::dashboardFooter(left = "Rob Wiederstein",
-                                              right = "MIT License 2021")
+                                              right = HTML('<a href="https://github.com/RobWiederstein/econDash/blob/main/LICENSE.md">MIT License 2021</a>')
 
 ##................................................................
 ##                        user-interface                         .
