@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Weekly Economic indicators index. — wei • econDash</title>
+<title>University of Michigan Consumer Sentiment Survey. — umcsent • econDash</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Weekly Economic indicators index. — wei" />
-<meta property="og:description" content="A dataset containing the weekly economic index for the U.S." />
+<meta property="og:title" content="University of Michigan Consumer Sentiment Survey. — umcsent" />
+<meta property="og:description" content="A dataset containing the average monthly sentiment of U.S. consumers" />
 
 
 
@@ -114,39 +114,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Weekly Economic indicators index.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/RobWiederstein/econDash/blob/master/R/data_wei.R'><code>R/data_wei.R</code></a></small>
-    <div class="hidden name"><code>wei.Rd</code></div>
+    <h1>University of Michigan Consumer Sentiment Survey.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/RobWiederstein/econDash/blob/master/R/data_umcsent.R'><code>R/data_umcsent.R</code></a></small>
+    <div class="hidden name"><code>umcsent.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset containing the weekly economic index for the U.S.</p>
+    <p>A dataset containing the average monthly sentiment of U.S. consumers</p>
     </div>
 
-    <pre class="usage"><span class='va'>wei</span></pre>
+    <pre class="usage"><span class='va'>umcsent</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A time series object where each row represents a week and 2 variables:</p>
+    <p>A dataframe where each row represents a month and 2 variables:</p>
 <dl>
-  <dt>date</dt><dd><p>date the index was computed</p></dd>
-  <dt>value</dt><dd><p>index value</p></dd>
+  <dt>date</dt><dd><p>date the survey was collected</p></dd>
+  <dt>value</dt><dd><p>index of consumer sentiment</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p><a href='http://www.diamondse.info/'>http://www.diamondse.info/</a></p>
+    <p><a href='https://data.sca.isr.umich.edu/fetchdoc.php?docid=24774'>https://data.sca.isr.umich.edu/fetchdoc.php?docid=24774</a></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The WEI is an index of real economic activity using timely and
-relevant high-frequency data. It represents the common component of ten
-different daily and weekly series covering consumer behavior, the labor
-market, and production. The WEI is scaled to the four-quarter GDP growth
-rate; for example, if the WEI reads -2 percent and the current level of
-the WEI persists for an entire quarter, we would expect, on average, GDP
-that quarter to be 2 percent lower than a year previously.</p>
+    <p>The Index of Consumer Expectations, published by the University
+of Michigan, focuses on three areas: how
+consumers view prospects for their own financial situation, how they
+view prospects for the general economy over the near term, and their
+view of prospects for the economy over the long term.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

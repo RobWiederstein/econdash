@@ -2,7 +2,10 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import shiny shinydashboard shinydashboardPlus
+#' @import shiny  shinydashboard
+#' @importFrom shinydashboardPlus accordion
+#' @importFrom shinydashboardPlus accordionItem
+
 #' @noRd
 
 
@@ -10,7 +13,7 @@
 ##                            header                             .
 ##................................................................
 
-header <- shinydashboard::dashboardHeader(
+header <- shinydashboardPlus::dashboardHeader(
     title = "Economic Dashboard"
 )
 
@@ -34,6 +37,7 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
 
 footer <- shinydashboardPlus::dashboardFooter(left = "Rob Wiederstein",
                                               right = HTML('<a href="https://github.com/RobWiederstein/econDash/blob/main/LICENSE.md">MIT License 2021</a>')
+)
 
 ##................................................................
 ##                        user-interface                         .
@@ -59,7 +63,7 @@ app_ui <- function(request) {
                         tabName = "economy",
                         fluidRow(
                             #### wei ----
-                            box(
+                            shinydashboardPlus::box(
                                 title = 'Weekly Economic Index (WEI)',
                                 status = "primary",
                                 collapsible = T,
@@ -86,7 +90,7 @@ app_ui <- function(request) {
                         tabName = "housing",
                         fluidRow(
                             #### CSUSHPINSA ----
-                            box(
+                            shinydashboardPlus::box(
                                 title = "Case-Shiller U.S. National Home Price Index
                                 (CSUSHPINSA)",
                                 status = "primary",
@@ -114,7 +118,7 @@ app_ui <- function(request) {
                         tabName = "sentiment",
                         fluidRow(
                             #### umcsent ----
-                            box(
+                            shinydashboardPlus::box(
                                 title = 'Univ. of Mich. Consumer Sentiment Survey (UMCSENT)',
                                 status = "primary",
                                 collapsible = T,
