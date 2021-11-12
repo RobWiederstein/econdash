@@ -1,5 +1,8 @@
 # code for wei
-#Sys.getenv("FRED_API_KEY")
+#set key for FRED
+fred_key <- Sys.getenv("FRED_API_KEY")
+# fetch wei
+fredr::fredr_set_key(fred_key)
 wei <- fredr::fredr(
 	series_id = "WEI",
 	observation_start = as.Date("2008-01-05")
