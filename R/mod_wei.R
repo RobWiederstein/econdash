@@ -20,7 +20,7 @@ mod_wei_ui <- function(id) {
 
 #' wei Server Functions
 #'
-#' importFrom econDash wei
+# importFrom econDash wei
 #' @noRd
 mod_wei_server <- function(id) {
     moduleServer(id, function(input, output, session) {
