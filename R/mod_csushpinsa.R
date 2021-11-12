@@ -20,13 +20,12 @@ mod_csushpinsa_ui <- function(id){
 
 #' csushpinsa Server Functions
 #'
-#' importFrom econDash csushpinsa
 #' @noRd
 mod_csushpinsa_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$csushpinsa_plot <- highcharter::renderHighchart({
-      x <- xts::xts(csushpinsa$value, csushpinsa$date)
+      x <- xts::xts(econDash$csushpinsa$value, econDash::csushpinsa$date)
       highcharter::hchart(x)
     })
   })

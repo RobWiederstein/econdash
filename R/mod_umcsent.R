@@ -21,13 +21,12 @@ mod_umcsent_ui <- function(id){
 
 #' umcsent Server Functions
 #'
-#' importFrom econDash  umcsent
 #' @noRd
 mod_umcsent_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$umcsent_plot <- highcharter::renderHighchart({
-      x <- xts::xts(umcsent$value, umcsent$date)
+      x <- xts::xts(econDash::umcsent$value, econDash::umcsent$date)
       highcharter::hchart(x)
     })
   })
