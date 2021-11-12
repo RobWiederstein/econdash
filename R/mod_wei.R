@@ -26,7 +26,7 @@ mod_wei_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
         output$wei_plot <- highcharter::renderHighchart({
-            x <- xts::xts(wei$value, wei$date)
+            x <- xts::xts(econDash::wei$value, econDash::wei$date)
             highcharter::hchart(x)
         })
     })
