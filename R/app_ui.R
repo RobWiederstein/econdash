@@ -25,7 +25,10 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     shinydashboard::sidebarMenu(
         # Setting id makes input$tabs give the tabName of currently-selected tab
         id = "tabs",
-        shinydashboard::menuItem("Economy", tabName = "economy", icon = icon("chart-line")),
+        shinydashboard::menuItem("Economy", tabName = "economy", icon = icon("chart-line"),
+                                 menuSubItem("econ1", icon = icon("chart-line")),
+                                 menuSubItem("econ2", icon = icon("chart-line")),
+                                 menuSubItem("econ3", icon = icon("chart-line"))),
         shinydashboard::menuItem("Housing", tabName = "housing", icon = icon("home")),
         shinydashboard::menuItem("Sentiment", tabName = "sentiment", icon = icon("thermometer"))
     )
