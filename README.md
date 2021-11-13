@@ -12,6 +12,30 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 The goal of econDash is to …
 
+## Dashboards
+
+Selecting individual economic metrics for a dashboard reflects the
+values of a society. The challenges of measuring an economy’s success by
+Gross Domestic Product (GDP) are and continue to be noted. The World
+Economic Forum (WEF) is reviewing different economic measures because of
+international concerns over sustainable development and changing
+economies. The WEF stated that:
+
+> Despite extensive efforts to anchor alternative measures of economic
+> performance, GDP growth today remains a core economic policy objective
+> and is still often treated as both a necessary and sufficient marker
+> of success. Yet targeting a recovery and future trajectory of GDP
+> growth alone will not be sufficient to advance the holistic economic
+> and societal reset that is needed today.
+
+> . . .
+
+> \\\[A\\\]n accelerated international convergence on a dashboard of
+> core metrics to steer consistent, forward-looking economic and social
+> policy and business decisions will be critical.
+
+-   [Dashboard for the New Economy]()
+
 ## Installation
 
 You can install the released version of econDash from
