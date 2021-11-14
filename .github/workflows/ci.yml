@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Setup R
         uses: r-lib/actions/setup-r@v1
-          with:
-            use-public-rspm: true
+        with:
+          use-public-rspm: true
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build Docker image
