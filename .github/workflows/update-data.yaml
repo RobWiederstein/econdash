@@ -18,5 +18,5 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-r-dependencies@v1
       - run: |
-          source("data-raw/fetch_datasets.R")
+          Rscript -e 'source("data-raw/fetch_datasets.R")'
           Rscript -e 'devtools::build()'
