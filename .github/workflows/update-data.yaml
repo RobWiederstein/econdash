@@ -1,5 +1,8 @@
+name: update_data
+
 on:
-  -cron: "50 0 * * 1-7"
+  schedule:
+    - cron: "50 0 * * 1-7"
   push:
     branches: [main, master]
 
