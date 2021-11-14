@@ -36,6 +36,8 @@ jobs:
           extra-packages: |
             rcmdcheck
             pkgdown
+            styler
+            lintr
           
       - name: Update data
         env:
@@ -58,6 +60,13 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+          
+      - name: Style Code
+        run: Rscript -e 'styler::style_pkg()'
+
+      - name: Lint Code
+        run: lintr::lint_package()
+        shell: Rscript {0}
         
       # confirm pkg will build prior to docker actions
       - name: Build package
