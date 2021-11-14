@@ -59,7 +59,14 @@ jobs:
         
       # confirm pkg will build prior to docker actions
       - name: Build package
-        run: Rscript -e 'devtools::build()'
+        run: R CMD INSTALL .
+        
+      # see https://github.com/r-lib/actions/blob/f97616df3c9edac51d0ec265f6499b113e84b0cd/examples/pkgdown.yaml
+      - name: Deploy package
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
           
       # see https://docs.docker.com/language/golang/configure-ci-cd/
 #      - name: Login to Docker Hub
