@@ -26,7 +26,6 @@ jobs:
         uses: r-lib/actions/setup-r@v1
         with:
           use-public-rspm: true
-        run: Rscript -e 'print("R setup")'
       
       # see https://github.com/r-lib/actions/tree/master/setup-r-dependencies
       # install packages listed in DESCRIPTION
@@ -34,12 +33,10 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
-        run: Rscript -e 'print("dependencies installed")'
           
       # see https://github.com/r-lib/actions/tree/master/check-r-package
       - name:  R CMD check 
         uses: r-lib/actions/check-r-package@v1
-        run: Rscript -e 'print("cmd check passed")'
 
       - name: Show testthat output
         if: always()
