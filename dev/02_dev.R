@@ -44,7 +44,7 @@ usethis::use_test( "app" )
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("econDash")
+usethis::use_vignette("econdash")
 devtools::build_vignettes()
 
 ## Code Coverage----

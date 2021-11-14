@@ -20,13 +20,13 @@ mod_wei_ui <- function(id) {
 
 #' wei Server Functions
 #'
-# importFrom econDash wei
+# importFrom econdash wei
 #' @noRd
 mod_wei_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
         output$wei_plot <- highcharter::renderHighchart({
-            x <- xts::xts(econDash::wei$value, econDash::wei$date)
+            x <- xts::xts(econdash::wei$value, econdash::wei$date)
             highcharter::hchart(x)
         })
     })

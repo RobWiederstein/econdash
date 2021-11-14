@@ -1,4 +1,4 @@
 library(testthat)
-library(econDash)
+library(econdash)
 
-test_check("econDash")
+test_check("econdash")

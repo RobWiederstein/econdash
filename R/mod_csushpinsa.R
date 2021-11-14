@@ -25,7 +25,7 @@ mod_csushpinsa_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$csushpinsa_plot <- highcharter::renderHighchart({
-      x <- xts::xts(econDash::csushpinsa$value, econDash::csushpinsa$date)
+      x <- xts::xts(econdash::csushpinsa$value, econdash::csushpinsa$date)
       highcharter::hchart(x)
     })
   })

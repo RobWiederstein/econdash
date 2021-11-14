@@ -26,7 +26,7 @@ mod_umcsent_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$umcsent_plot <- highcharter::renderHighchart({
-      x <- xts::xts(econDash::umcsent$value, econDash::umcsent$date)
+      x <- xts::xts(econdash::umcsent$value, econdash::umcsent$date)
       highcharter::hchart(x)
     })
   })

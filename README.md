@@ -1,16 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# econDash
+# econdash
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/RobWiederstein/econDash/workflows/R-CMD-check/badge.svg)](https://github.com/RobWiederstein/econDash/actions)
+[![R-CMD-check](https://github.com/RobWiederstein/econdash/workflows/R-CMD-check/badge.svg)](https://github.com/RobWiederstein/econdash/actions)
 <!-- badges: end -->
 
-The goal of econDash is to …
+The goal of econdash is to …
 
 ## Dashboards
 
@@ -38,11 +38,11 @@ economies. The WEF stated that:
 
 ## Installation
 
-You can install the released version of econDash from
+You can install the released version of econdash from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("econDash")
+install.packages("econdash")
 ```
 
 ## Example
@@ -50,7 +50,7 @@ install.packages("econDash")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(econDash)
+library(econdash)
 ## basic example code
 ```
 

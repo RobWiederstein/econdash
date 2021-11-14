@@ -39,7 +39,7 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
 ##................................................................
 
 footer <- shinydashboardPlus::dashboardFooter(left = "Rob Wiederstein",
-                                              right = HTML('<a href="https://github.com/RobWiederstein/econDash/blob/main/LICENSE.md">MIT License 2021</a>')
+                                              right = HTML('<a href="https://github.com/RobWiederstein/econdash/blob/main/LICENSE.md">MIT License 2021</a>')
 )
 
 ##................................................................
@@ -175,7 +175,7 @@ golem_add_external_resources <- function() {
         favicon(),
         bundle_resources(
             path = app_sys("app/www"),
-            app_title = "econDash"
+            app_title = "econdash"
         )
         # Add here other external resources
         # for example, you can add shinyalert::useShinyalert()

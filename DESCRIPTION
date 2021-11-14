@@ -1,4 +1,4 @@
-Package: econDash
+Package: econdash
 Title: US Economic Dashboard
 Version: 0.0.0.9000
 Authors@R: person('Rob', 'Wiederstein', email = 'rob@robwiederstein.org', role = c('cre', 'aut'))
@@ -31,7 +31,7 @@ Suggests:
 Config/testthat/edition: 3
 Language: en-US
 VignetteBuilder: knitr
-URL: https://github.com/RobWiederstein/econDash
-BugReports: https://github.com/RobWiederstein/econDash/issues
+URL: https://github.com/RobWiederstein/econdash
+BugReports: https://github.com/RobWiederstein/econdash/issues
 Depends: 
     R (>= 2.10)
