@@ -17,6 +17,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Build Docker image
         uses: docker/build-push-action@v2
-          with:
-            push: false
-            tags: ${{ github.event.repository.name }}:latest, ${{ github.repository }}:latest
+        with:
+          push: false
+          tags: ${{ github.event.repository.name }}:latest, ${{ github.repository }}:latest
