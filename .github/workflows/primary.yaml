@@ -3,6 +3,7 @@
 on:
   push:
     branches: [main, master]
+    tags: '*.*.*'
   pull_request:
     branches: [main, master]
 
@@ -37,9 +38,7 @@ jobs:
       - name: Update data
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: |
-          Rscript -e 'source("data-raw/fetch_datasets.R")'
-          Rscript -e 'devtools::build()'
+        run: Rscript -e 'source("data-raw/fetch_datasets.R")'
           
       # see https://github.com/r-lib/actions/tree/master/check-r-package
       - name:  R CMD check 
@@ -57,3 +56,26 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+        
+      # confirm pkg will build prior to docker actions
+      - name: Build package
+        run: Rscript -e 'devtools::build()'
+          
+      # see https://docs.docker.com/language/golang/configure-ci-cd/
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+      # see https://docs.docker.com/language/golang/configure-ci-cd/
+      - name: Build and push Docker image
+        id:   docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          
+       # image digest prints out the image metadata to the log.   
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
