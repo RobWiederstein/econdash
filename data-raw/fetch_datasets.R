@@ -1,7 +1,7 @@
 # code for wei
 #set key for FRED
-#fred_key <- Sys.getenv("FRED_API_KEY")
-fred_key <- ${{ secrets.FRED_API_KEY }}
+fred_key <- Sys.getenv("FRED_API_KEY")
+#fred_key <- {{ secrets.FRED_API_KEY }}
 # fetch wei
 fredr::fredr_set_key(fred_key)
 wei <- fredr::fredr(
