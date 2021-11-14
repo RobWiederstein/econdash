@@ -34,6 +34,13 @@ jobs:
         with:
           extra-packages: rcmdcheck
           
+      - name: Update data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          Rscript -e 'source("data-raw/fetch_datasets.R")'
+          Rscript -e 'devtools::build()'
+          
       # see https://github.com/r-lib/actions/tree/master/check-r-package
       - name:  R CMD check 
         uses: r-lib/actions/check-r-package@v1
