@@ -42,6 +42,14 @@ jobs:
             pkgdown
             styler
             lintr
+            
+      # see https://github.com/tidyverse/tidyverse/blob/main/.github/workflows/R-CMD-check.yaml      
+      - name: Inspect packages
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
           
       - name: Update data
         env:
