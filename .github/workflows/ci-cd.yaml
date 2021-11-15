@@ -97,6 +97,15 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          
+      - name: Log into DigitalOcean Container Registry 
+        run: doctl registry login --expiry-seconds 3600
+          
+      # see https://github.com/digitalocean/action-doctl
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_API_KEY }}
       
       # see https://docs.docker.com/language/golang/configure-ci-cd/
       - name: Build and push Docker image
@@ -111,14 +120,6 @@ jobs:
        # image digest prints out the image metadata to the log.   
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      # see https://github.com/digitalocean/action-doctl
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITAL_OCEAN_API_KEY }}
-          
-      - name: Log into DigitalOcean Container Registry 
-        run: doctl registry login --expiry-seconds 3600
         
       - name: Push to DigitalOcean Container Registry
         run: |
