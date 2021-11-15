@@ -27,6 +27,10 @@ jobs:
         uses: r-lib/actions/setup-r@v1
         with:
           use-public-rspm: true
+          
+      # see pandoc https://github.com/r-lib/actions/tree/master/setup-pandoc
+      - name: Install pandoc
+        uses: r-lib/actions/setup-pandoc@v1
       
       # see https://github.com/r-lib/actions/tree/master/setup-r-dependencies
       # install packages listed in DESCRIPTION
