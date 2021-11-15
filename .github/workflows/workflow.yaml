@@ -119,7 +119,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
-            #registry.digitalocean.com/econdash:latest
+      # registry.digitalocean.com/econdash:latest
           
        # image digest prints out the image metadata to the log.   
       - name: Image digest
