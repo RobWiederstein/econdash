@@ -23,7 +23,7 @@ jobs:
         uses: docker/login-action@v1 
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       # end logins
       
       #https://github.com/docker/build-push-action/blob/master/docs/advanced/copy-between-registries.md
