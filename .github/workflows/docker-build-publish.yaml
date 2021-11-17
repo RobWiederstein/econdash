@@ -47,9 +47,19 @@ jobs:
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
             registry.digitalocean.com/robwiederstein/econdash:latest
             
+      # smart because you can see image names in log      
+      - name: Docker images list
+        run: | 
+          sudo docker image list
+            
       - name: Push to Docker
         run: |
           docker push robwiederstein/econdash:latest
+          
+      - name: Push to DigitalOcean Registry
+        run: |
+          docker push registry.digitalocean.com/robwiederstein/econdash:latest
+
         
             
       
