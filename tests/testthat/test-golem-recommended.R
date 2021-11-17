@@ -1,3 +1,4 @@
+# add test
 test_that("app ui", {
   ui <- app_ui()
   golem::expect_shinytaglist(ui)
