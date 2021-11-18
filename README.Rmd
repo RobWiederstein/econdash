@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/RobWiederstein/econdash/workflows/R-CMD-check/badge.svg)](https://github.com/RobWiederstein/econdash/actions)
 [![Codecov test coverage](https://codecov.io/gh/RobWiederstein/econdash/branch/main/graph/badge.svg)](https://app.codecov.io/gh/RobWiederstein/econdash?branch=main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/RobWiederstein/econdash/LICENSE.md)
+
 <!-- badges: end -->
 
 The goal of econdash is to ...
