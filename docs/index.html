@@ -77,10 +77,13 @@
 <a href="#econdash" class="anchor"></a>econdash</h1></div>
 <!-- badges: start -->
 
-<p>The goal of econdash is to …</p>
+<!-- badges: end -->
+<p>The <code>econdash</code> package centralizes US economic and financial data on a dashboard. The data is predominately from government sources like the Federal Reserve Economic Data (“FRED”). The purpose was to provide a quick overview of key performance indicators that are commonly relied upon by economists to describe the state of the economy.</p>
+<p>Dashboards are used in many contexts to display data. A survey of economic dashboards reveal a diversity in user interfaces, content and usability. The <code>econdash</code> package attempts to mimic the best features of available dashboards, simplifying the visualizations, minimizing the use of text, and promptly updating the data. The goal is for engaged citizens to quickly understand the state of the U.S. economy.</p>
 <div id="dashboards" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dashboards" class="anchor"></a>Dashboards</h2>
+<p>In designing the dashboard, a number of initiatives were reviewed. Given the prevalence of dashboards, many institutions view their use as important in informing and shaping public opinion. Some examples are included below:</p>
 <div id="world-economic-forum-wef" class="section level3">
 <h3 class="hasAnchor">
 <a href="#world-economic-forum-wef" class="anchor"></a>World Economic Forum (WEF)</h3>
@@ -117,27 +120,22 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"econdash"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RobWiederstein/econdash">econdash</a></span><span class="op">)</span>
-<span class="co">## basic example code</span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span>
-<span class="co">#&gt;      speed           dist       </span>
-<span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span>
-<span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span>
-<span class="co">#&gt;  Median :15.0   Median : 36.00  </span>
-<span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span>
-<span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span>
-<span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code><a href="https://devtools.r-lib.org//reference/build_rmd.html">devtools::build_readme()</a></code> is handy for this. You could also use GitHub Actions to re-render <code>README.Rmd</code> every time you push. An example workflow can be found here: <a href="https://github.com/r-lib/actions/tree/master/examples" class="uri">https://github.com/r-lib/actions/tree/master/examples</a>.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<a href="#acknowledgements" class="anchor"></a>Acknowledgements:</h2>
+<p>The following <code>R</code> packages proved invaluable and the author is grateful for their creation:</p>
+<ul>
+<li><code>golem</code></li>
+<li><code>usethis</code></li>
+<li><code>shiny</code></li>
+<li><code>dashboardPlus</code></li>
+<li><code>pkgdown</code></li>
+</ul>
+</div>
+<div id="code-of-conduct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
+<p>Please note that the econdash project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
@@ -178,6 +176,8 @@
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/RobWiederstein/econdash/actions"><img src="https://github.com/RobWiederstein/econdash/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/RobWiederstein/econdash?branch=main"><img src="https://codecov.io/gh/RobWiederstein/econdash/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/RobWiederstein/econdash/LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a></li>
+<li><a href="https://github.com/RobWiederstein/econdash/"><img src="https://img.shields.io/github/last-commit/RobWiederstein/econdash.svg" alt="Last Commit: today"></a></li>
 </ul>
 </div>
 </div>
