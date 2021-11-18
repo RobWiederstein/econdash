@@ -42,6 +42,7 @@ jobs:
             pkgdown
             styler
             lintr
+            covr
             
       # see https://github.com/tidyverse/tidyverse/blob/main/.github/workflows/R-CMD-check.yaml      
       - name: Inspect packages
@@ -64,16 +65,12 @@ jobs:
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
+       
+      # https://github.com/r-lib/actions/blob/master/examples/test-coverage.yaml
+      - name: Test coverage
+        run: covr::codecov()
+        shell: Rscript {0}
         
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: ./coverage1.xml,./coverage2.xml # optional
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
-
       # see https://github.com/actions/upload-artifact
       - name: Upload check results
         if: failure()
