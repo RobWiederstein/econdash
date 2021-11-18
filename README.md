@@ -10,11 +10,32 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/RobWiederstein/econdash/workflows/R-CMD-check/badge.svg)](https://github.com/RobWiederstein/econdash/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/RobWiederstein/econdash/branch/main/graph/badge.svg)](https://app.codecov.io/gh/RobWiederstein/econdash?branch=main)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/RobWiederstein/econdash/LICENSE.md)
+[![Last Commit:
+today](https://img.shields.io/github/last-commit/RobWiederstein/econdash.svg)](https://github.com/RobWiederstein/econdash/)
+
 <!-- badges: end -->
 
-The goal of econdash is to …
+The `econdash` package centralizes US economic and financial data on a
+dashboard. The data is predominately from government sources like the
+Federal Reserve Economic Data (“FRED”). The purpose was to provide a
+quick overview of key performance indicators that are commonly relied
+upon by economists to describe the state of the economy.
+
+Dashboards are used in many contexts to display data. A survey of
+economic dashboards reveal a diversity in user interfaces, content and
+usability. The `econdash` package attempts to mimic the best features of
+available dashboards, simplifying the visualizations, minimizing the use
+of text, and promptly updating the data. The goal is for engaged
+citizens to quickly understand the state of the U.S. economy.
 
 ## Dashboards
+
+In designing the dashboard, a number of initiatives were reviewed. Given
+the prevalence of dashboards, many institutions view their use as
+important in informing and shaping public opinion. Some examples are
+included below:
 
 ### World Economic Forum (WEF)
 
@@ -60,38 +81,20 @@ You can install the released version of econdash from
 install.packages("econdash")
 ```
 
-## Example
+## Acknowledgements:
 
-This is a basic example which shows you how to solve a common problem:
+The following `R` packages proved invaluable and the author is grateful
+for their creation:
 
-``` r
-library(econdash)
-## basic example code
-```
+-   `golem`
+-   `usethis`
+-   `shiny`
+-   `dashboardPlus`
+-   `pkgdown`
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+## Code of Conduct
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/master/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+Please note that the econdash project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
