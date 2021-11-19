@@ -55,6 +55,17 @@ Dashboard for a New Economy Towards a New Compass for the Post-COVID Recovery](h
 
 - [The Recoupling Dashboard 2021](https://www.global-solutions-initiative.org/recoupling-dashboard/)
 
+- [Organization for Economic Cooperation and Development](https://stats.oecd.org/Index.aspx?DataSetCode=HH_DASH)
+
+- [U.S. Department of Commerce](https://www.commerce.gov/data-and-reports/economic-indicators/dashboard)
+
+- [World Bank -- Carbon Pricing Dashboard](https://carbonpricingdashboard.worldbank.org)
+
+- [PPI Visualization Dashboard](https://carbonpricingdashboard.worldbank.org)
+
+- [halifax Economic Dashboard](https://halifaxpartnership.com/research-strategy/economic-dashboard/)
+
+
 ## Data Sources
 
 ### [CIA World Factbook](https://raw.githubusercontent.com/iancoleman/cia_world_factbook_api/master/data/factbook.json)
