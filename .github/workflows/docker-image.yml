@@ -14,16 +14,16 @@ jobs:
 
     steps:
     
-    - name: Check out code
-      uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v2
     
-    - name: Build docker image
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
     
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag robwiederstein/econdash:$(date +%s)
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag robwiederstein/econdash:$(date +%s)
       
-    - name: Push the Docker image
-      run: docker push robwiederstein/econdash:$(date +%s)
+      - name: Push the Docker image
+        run: docker push robwiederstein/econdash:$(date +%s)
