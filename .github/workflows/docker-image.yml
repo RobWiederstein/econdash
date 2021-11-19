@@ -19,8 +19,8 @@ jobs:
     
     - name: Build docker image
       env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
     
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag robwiederstein/econdash:$(date +%s)
