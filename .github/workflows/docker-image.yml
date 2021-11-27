@@ -13,6 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag robwiederstein/econdash:$(date +%s)
+    
+      - name: Check out code
+        uses: actions/checkout@v2
+    
+      - name: Build the Docker image
+        run: docker build -t robwiederstein/econdash . 
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+      - name: Push the Docker image
+        run: docker push robwiederstein/econdash:latest
