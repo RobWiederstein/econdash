@@ -1,4 +1,4 @@
-#' US business cycles.
+#' US business us_recessions.
 #'
 #' A dataset containing the US business cycle expansions and contractions from 1857 forward
 #'
@@ -10,7 +10,7 @@
 #' }
 #'
 #' @details The NBER’s Business Cycle Dating Committee maintains a chronology
-#' of US business cycles. The chronology identifies the dates of peak and
+#' of US business us_recessions. The chronology identifies the dates of peak and
 #' trough months in economic activity. The peak is the month in which a
 #' variety of economic indicators reach their highest level, followed by
 #' a significant decline in economic activity. Similarly, a month is
@@ -18,4 +18,4 @@
 #' begins to rise again for a sustained period.
 #'
 #' @source \url{https://www.nber.org/research/business-cycle-dating/business-cycle-dating-procedure-frequently-asked-questions}
-"cycles"
+"us_recessions"

@@ -2,5 +2,7 @@
 #'
 utils::globalVariables(c("csushpinsa",
 			 "umcsent",
-			 "wei")
+			 "wei",
+			 "us_recessions",
+			 "oecd_prices_cpi")
 )

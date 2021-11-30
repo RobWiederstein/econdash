@@ -25,12 +25,17 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     shinydashboard::sidebarMenu(
         # Setting id makes input$tabs give the tabName of currently-selected tab
         id = "tabs",
-        shinydashboard::menuItem("Economy", tabName = "economy", icon = icon("chart-line"),
-                                 menuSubItem("econ1", icon = icon("chart-line")),
-                                 menuSubItem("econ2", icon = icon("chart-line")),
-                                 menuSubItem("econ3", icon = icon("chart-line"))),
-        shinydashboard::menuItem("Housing", tabName = "housing", icon = icon("home")),
-        shinydashboard::menuItem("Sentiment", tabName = "sentiment", icon = icon("thermometer"))
+        shinydashboard::menuItem("General", tabName = "general", icon = icon("chart-line"),
+                                 menuSubItem("GDP total", tabName = "gdp_total", icon = icon("chart-line")),
+                                 menuSubItem("GDP per capita", tabName = "gdp_per_capita", icon = icon("chart-line")),
+                                 menuSubItem("Inflation", tabName = "inflation", icon = icon("chart-line")),
+                                 menuSubItem("Unemployment", tabName = "unemployment", icon = icon("chart-line"))),
+        shinydashboard::menuItem("Housing", tabName = "housing", icon = icon("home"),
+                                 menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home"))),
+        shinydashboard::menuItem("Leading", tabName = "leading", icon = icon("chart-line"),
+                                 menuSubItem("WEI", tabName = "wei", icon = icon("chart-line"))),
+        shinydashboard::menuItem("Sentiment", tabName = "sentiment", icon = icon("thermometer"),
+                                 menuSubItem("U. of Mich.", "uofm", icon = icon("thermometer")))
     )
 )
 
@@ -38,8 +43,9 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
 ##                            footer                             .
 ##................................................................
 
-footer <- shinydashboardPlus::dashboardFooter(left = "Rob Wiederstein",
-                                              right = HTML('<a href="https://github.com/RobWiederstein/econdash/blob/main/LICENSE.md">MIT License 2021</a>')
+footer <- shinydashboardPlus::dashboardFooter(
+    left = "Rob Wiederstein",
+    right = HTML('<a href="https://github.com/RobWiederstein/econdash/blob/main/LICENSE.md">MIT License 2021</a>')
 )
 
 ##................................................................
@@ -52,7 +58,7 @@ app_ui <- function(request) {
         golem_add_external_resources(),
         # begin UI ----
         shinydashboardPlus::dashboardPage(
-            skin = "midnight",
+            skin = "blue",
             md = TRUE,
             ## header (see above) ----
             header = header,
@@ -61,44 +67,77 @@ app_ui <- function(request) {
             ## body ----
             body = dashboardBody(
                 tabItems(
-                    ### economy  ----
-                    tabItem(
-                        tabName = "economy",
-                        fluidRow(
-                            #### wei ----
-                            shinydashboardPlus::box(
-                                title = 'Weekly Economic Index (WEI)',
-                                status = "primary",
-                                collapsible = T,
-                                collapsed = T,
-                                mod_wei_ui("wei_ui_1"),
-                                accordion(
-                                    id = "accordion1",
-                                    accordionItem(
-                                        title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
-                                        #status = "success",
-                                        collapsed = TRUE,
-                                        HTML("<p style='font-size:16px'>The WEI is an index of ten indicators of real economic
-                                             activity, scaled to align with the four-quarter GDP
-                                             growth rate. It represents the common component of
-                                             series covering consumer behavior, the labor market,
-                                             and production. Additional information <a href='https://nyfed.org/3obE6uP'>here</a>.</p>")
+                    ### general  ----
+                    tabItem(tabName = "general", "general"),
+                        #### gdp ----
+                    tabItem(tabName = "gdp_total",
+                            fluidRow(
+                                shinydashboardPlus::box(
+                                    title = "OECD GDP total",
+                                    width = 12,
+                                    status = "primary",
+                                    collapsible = TRUE,
+                                    collapsed = F,
+                                    mod_gdp_total_ui("gdp_total_ui_1"),
+                                    accordion(
+                                        id = "gdp_total",
+                                        accordionItem(
+                                            title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
+                                            #status = "success",
+                                            collapsed = TRUE,
+                                            HTML("The S&P CoreLogic Case-Shiller U.S. National Home Price NSA Index is a composite of
+                                        single-family home price indices for the nine U.S. Census divisions
+                                        and is calculated monthly. The index seeks to measure changes in
+                                        the total value of all existing single-family housing stock. Additional
+                                        informat <a href='https://bit.ly/3klOFdK'>here</a>."
+                                                 )
+                                            )
+                                        )
                                     )
                                 )
-                            )
-                        )
-                    ),
+                            ),
+                        #### inflation ----
+                    tabItem(tabName = "inflation", "inflation"),
+                        #     fluidRow(
+                        #         shinydashboardPlus::box(
+                        #             title = "OECD Inflation Prices",
+                        #             width = 12,
+                        #             status = "primary",
+                        #             collapsible = TRUE,
+                        #             collapsed = F,
+                        #             mod_oecd_prices_cpi_ui("oecd_prices_cpi_ui_1"),
+                        #             accordion(
+                        #                 id = "gdp_total",
+                        #                 accordionItem(
+                        #                     title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
+                        #                     #status = "success",
+                        #                     collapsed = TRUE,
+                        #                     HTML("The S&P CoreLogic Case-Shiller U.S. National Home Price NSA Index is a composite of
+                        #                 single-family home price indices for the nine U.S. Census divisions
+                        #                 and is calculated monthly. The index seeks to measure changes in
+                        #                 the total value of all existing single-family housing stock. Additional
+                        #                 informat <a href='https://bit.ly/3klOFdK'>here</a>."
+                        #                     )
+                        #                 )
+                        #             )
+                        #         )
+                        #     )
+                        # ),
+                        #### unemployment ----
+                    tabItem(tabName = "unemployment", "unemployment"),
                     ### housing  ----
-                    tabItem(
-                        tabName = "housing",
+                    tabItem(tabName = "housing", "housing"),
+                        #### Case-Shiller National Housing Price Index ----
+                    tabItem(tabName = "hpi",
                         fluidRow(
-                            #### CSUSHPINSA ----
+
                             shinydashboardPlus::box(
                                 title = "Case-Shiller U.S. National Home Price Index
                                 (CSUSHPINSA)",
+                                width = 12,
                                 status = "primary",
                                 collapsible = TRUE,
-                                collapsed = TRUE,
+                                collapsed = F,
                                 mod_csushpinsa_ui("csushpinsa_ui_1"),
                                 accordion(
                                     id = "acc_csushpinsa",
@@ -116,16 +155,45 @@ app_ui <- function(request) {
                             )
                         )
                     ),
-                    ### sentiment  ----
-                    tabItem(
-                        tabName = "sentiment",
+                    ### leading ----
+                    tabItem(tabName = "leading", "leading"),
+                        #### weekly economic index ----
+                    tabItem(tabName = "wei",
                         fluidRow(
-                            #### umcsent ----
                             shinydashboardPlus::box(
-                                title = 'Univ. of Mich. Consumer Sentiment Survey (UMCSENT)',
+                                title = 'Weekly Economic Index (WEI)',
+                                width = 12,
                                 status = "primary",
                                 collapsible = T,
-                                collapsed = T,
+                                collapsed = F,
+                                mod_wei_ui("wei_ui_1"),
+                                accordion(
+                                    id = "accordion1",
+                                    accordionItem(
+                                        title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
+                                        #status = "success",
+                                        collapsed = TRUE,
+                                        HTML("<p style='font-size:16px'>The WEI is an index of ten indicators of real economic
+                                         activity, scaled to align with the four-quarter GDP
+                                         growth rate. It represents the common component of
+                                         series covering consumer behavior, the labor market,
+                                         and production. Additional information <a href='https://nyfed.org/3obE6uP'>here</a>.</p>")
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    ### sentiment  ----
+                    tabItem(tabName = "sentiment","sentiment"),
+                        #### umcsent ----
+                    tabItem(tabName = "uofm",
+                        fluidRow(
+                            shinydashboardPlus::box(
+                                title = 'Univ. of Mich. Consumer Sentiment Survey (UMCSENT)',
+                                width = 12,
+                                status = "primary",
+                                collapsible = T,
+                                collapsed = F,
                                 mod_umcsent_ui("umcsent_ui_1"),
                                 accordion(
                                     id = "acc_umcsent",
@@ -148,6 +216,7 @@ app_ui <- function(request) {
                             )
                         )
                     )
+            ## end body ----
                 )
             ),
             ## footer ----
