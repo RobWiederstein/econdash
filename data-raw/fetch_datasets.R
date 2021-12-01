@@ -38,6 +38,20 @@ oecd_gdp_total <-
 	# oecd releases the amt (in millions) US dollars
 	dplyr::mutate(obs_value = '/'(obs_value, 1e6) |> round(2))
 usethis::use_data(oecd_gdp_total, internal = T, overwrite = T)
+##----------------------------------------------------------------
+# OECD GDP Total
+file <- paste0('https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/SNA_TABLE1/',
+	       'USA+EA19+CHN.B1_GE.HVPVOB/all?startTime=2001')
+df <- rsdmx::readSDMX(file = file) |> as.data.frame()
+# clean
+oecd_gdp_per_capita <-
+	df |>
+	janitor::clean_names() |>
+	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01-01"), format = "%Y-%m-%d")) |>
+	dplyr::mutate(obs_value = obs_value |> round(0)) |>
+	dplyr::mutate(measure = gsub("HVPVOB", "Per head, constant PPPs", measure))
+# save
+usethis::use_data(oecd_gdp_per_capita, internal = T, overwrite = T)
 ##  Consumer prices - Annual inflation, All items non-food non-energy
 ## https://stats.oecd.org/Index.aspx?QueryId=82173
 ##................................................................

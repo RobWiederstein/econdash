@@ -10,5 +10,6 @@ app_server <- function( input, output, session ) {
 	mod_umcsent_server("umcsent_ui_1")
 	mod_csushpinsa_server("csushpinsa_ui_1")
 	mod_gdp_total_server("gdp_total_ui_1")
+	mod_gdp_per_capita_server("gdp_per_capita_ui_1")
 	mod_oecd_prices_cpi_server("oecd_prices_cpi_ui_1")
 }
