@@ -97,32 +97,32 @@ app_ui <- function(request) {
                                 )
                             ),
                         #### inflation ----
-                    tabItem(tabName = "inflation", "inflation"),
-                        #     fluidRow(
-                        #         shinydashboardPlus::box(
-                        #             title = "OECD Inflation Prices",
-                        #             width = 12,
-                        #             status = "primary",
-                        #             collapsible = TRUE,
-                        #             collapsed = F,
-                        #             mod_oecd_prices_cpi_ui("oecd_prices_cpi_ui_1"),
-                        #             accordion(
-                        #                 id = "gdp_total",
-                        #                 accordionItem(
-                        #                     title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
-                        #                     #status = "success",
-                        #                     collapsed = TRUE,
-                        #                     HTML("The S&P CoreLogic Case-Shiller U.S. National Home Price NSA Index is a composite of
-                        #                 single-family home price indices for the nine U.S. Census divisions
-                        #                 and is calculated monthly. The index seeks to measure changes in
-                        #                 the total value of all existing single-family housing stock. Additional
-                        #                 informat <a href='https://bit.ly/3klOFdK'>here</a>."
-                        #                     )
-                        #                 )
-                        #             )
-                        #         )
-                        #     )
-                        # ),
+                    tabItem(tabName = "inflation",
+                            fluidRow(
+                                shinydashboardPlus::box(
+                                    title = "OECD Inflation Prices",
+                                    width = 12,
+                                    status = "primary",
+                                    collapsible = TRUE,
+                                    collapsed = F,
+                                    mod_oecd_prices_cpi_ui("oecd_prices_cpi_ui_1"),
+                                    accordion(
+                                        id = "gdp_total",
+                                        accordionItem(
+                                            title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#009688" aria-hidden="true"></i>'),
+                                            #status = "success",
+                                            collapsed = TRUE,
+                                            HTML("The S&P CoreLogic Case-Shiller U.S. National Home Price NSA Index is a composite of
+                                        single-family home price indices for the nine U.S. Census divisions
+                                        and is calculated monthly. The index seeks to measure changes in
+                                        the total value of all existing single-family housing stock. Additional
+                                        informat <a href='https://bit.ly/3klOFdK'>here</a>."
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        ),
                         #### unemployment ----
                     tabItem(tabName = "unemployment", "unemployment"),
                     ### housing  ----
