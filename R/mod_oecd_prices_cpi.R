@@ -11,13 +11,13 @@
 mod_oecd_prices_cpi_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    highchartOutput(NS(id, "chart1")),
+    highchartOutput(ns("chart1")),
     hr(),
     fluidRow(
       column(
         6,
         pickerInput(
-          inputId = NS(id, "location"),
+          inputId = ns("location"),
           label = "Location: ",
           choices = sort(unique(oecd_prices_cpi$location)),
           selected = c("USA", "G-20"),
@@ -33,7 +33,7 @@ mod_oecd_prices_cpi_ui <- function(id) {
       column(
         6,
         pickerInput(
-          inputId = NS(id, "subject"),
+          inputId = ns("subject"),
           label = "Subject:",
           choices = sort(unique(oecd_prices_cpi$names)),
           selected = sort(unique(oecd_prices_cpi$names))[1],
