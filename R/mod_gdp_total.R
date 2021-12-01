@@ -8,7 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import highcharter
-#' @importFrom shinyWidgets pickerInput
+#' @import shinyWidgets
 #' @importFrom rlang .data
 mod_gdp_total_ui <- function(id){
   ns <- NS(id)
