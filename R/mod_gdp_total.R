@@ -20,9 +20,9 @@ mod_gdp_total_ui <- function(id){
     fluidRow(
       column(
         6,
+        tags$h3("Country:"),
         pickerInput(
           inputId = ns("location"),
-          label = "Location: ",
           choices = sort(unique(oecd_gdp_total$location)),
           selected = c("USA"),
           multiple = T,
@@ -36,9 +36,9 @@ mod_gdp_total_ui <- function(id){
       ),
       column(
         6,
+        tags$h3("Indicator:"),
         pickerInput(
           inputId = ns("measure"),
-          label = "Measure:",
           choices = sort(unique(oecd_gdp_total$measure)),
           selected = sort(unique(oecd_gdp_total$measure))[1],
           multiple = F
