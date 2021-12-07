@@ -1,70 +1,34 @@
-# code for wei
-#set key for FRED
-fred_key <- Sys.getenv("FRED_API_KEY")
-#fred_key <- {{ secrets.FRED_API_KEY }}
-# fetch wei
-fredr::fredr_set_key(fred_key)
-wei <- fredr::fredr(
-	series_id = "WEI",
-	observation_start = as.Date("2008-01-05")
-)
-wei <- wei |> dplyr::select(date, value)
-usethis::use_data(wei, overwrite = TRUE)
-#fetch recession
-file <- "http://data.nber.org/data/us_recessions/20210719_cycle_dates_pasted.csv"
-us_recessions <- readr::read_csv(file = file)
-usethis::use_data(us_recessions, overwrite = TRUE)
-# fetch sentiment
-umcsent <- fredr::fredr(
-	series_id = "UMCSENT",
-	observation_start = as.Date("2000-01-01")
-)
-umcsent <- umcsent |> dplyr::select(date, value)
-usethis::use_data(umcsent, overwrite = TRUE)
-# fetch case-shiller national home price index
-csushpinsa <- fredr::fredr(
-	series_id = "CSUSHPINSA",
-	observation_start = as.Date("2000-01-01")
-)
-csushpinsa <- csushpinsa |> dplyr::select(date, value)
-usethis::use_data(csushpinsa, overwrite = TRUE)
-##----------------------------------------------------------------
-file <- 'https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/SNA_TABLE1/USA+EA19+CHN.B1_GE.VPVOB/all?startTime=2001&endTime=2020'
+
+#                        MISCELLANEOUS                       ----
+## us_recessions ----
+file <- 'http://data.nber.org/data/cycles/business_cycle_dates.json'
+us_recessions <- rjson::fromJSON(file=file)
+
+#                          GENERAL                           ----
+## oecd_gdp_total ----
+file <- paste0('https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/SNA_TABLE1/',
+	       'USA+EA19+CHN.B1_GE.VPVOB/all?startTime=2001&endTime=2020')
 df <- rsdmx::readSDMX(file = file) |> as.data.frame()
 oecd_gdp_total <-
 	df |>
 	janitor::clean_names() |>
-	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01-01"), format = "%Y-%m-%d")) |>
-	# oecd releases the amt (in millions) US dollars
+	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01-01"),
+					 format = "%Y-%m-%d")) |>
 	dplyr::mutate(obs_value = '/'(obs_value, 1e6) |> round(2))
-usethis::use_data(oecd_gdp_total, internal = T, overwrite = T)
-##----------------------------------------------------------------
-# OECD GDP Total
+## oecd_gdp_per_capita ----
 file <- paste0('https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/SNA_TABLE1/',
 	       'USA+EA19+CHN.B1_GE.HVPVOB/all?startTime=2001')
 df <- rsdmx::readSDMX(file = file) |> as.data.frame()
-# clean
 oecd_gdp_per_capita <-
 	df |>
 	janitor::clean_names() |>
 	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01-01"), format = "%Y-%m-%d")) |>
 	dplyr::mutate(obs_value = obs_value |> round(0)) |>
 	dplyr::mutate(measure = gsub("HVPVOB", "Per head, constant PPPs", measure))
-# save
-usethis::use_data(oecd_gdp_per_capita, internal = T, overwrite = T)
-##  Consumer prices - Annual inflation, All items non-food non-energy
-## https://stats.oecd.org/Index.aspx?QueryId=82173
-##................................................................
-base <- 'https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/'
-variable <- 'PRICES_CPI/'
-country <- 'USA+EA19+CHN.'
-subject <- 'CPALTT01+CP010000+CPGREN01+CPGRLE01.'
-measure <- 'GY.'
-frequency <- 'M/'
-agency <- 'all'
-startTime <- '?startTime=2000-01'
-#query
-file <- paste0(base, variable, country, subject, measure, frequency, agency, startTime)
+##  oecd_prices_cpi  ----
+file <- paste0('https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/',
+	       'PRICES_CPI/USA+EA19+CHN.CPALTT01+CP010000+CPGREN01+CPGRLE01.',
+	       'GY.M/all?startTime=2000-01')
 df <- rsdmx::readSDMX(file = file) |> as.data.frame()
 df.1 <-
 	df |>
@@ -80,4 +44,63 @@ cpi.cw <- data.frame(subject = c("CP010000", "CPALTT01", "CPGREN01", "CPGRLE01")
 )
 # merge
 oecd_prices_cpi <- dplyr::left_join(df.1, cpi.cw, by = "subject")
-usethis::use_data(oecd_prices_cpi, internal = T, overwrite = T)
+##  oecd_kei_unempl_rate ----
+file <- paste0('https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/',
+	       'KEI/LR+LRHUTTTT.USA+EA19+CHN.ST.M/all?',
+	       'startTime=2001-11&endTime=2021-10')
+df <- rsdmx::readSDMX(file = file) |> as.data.frame()
+oecd_kei_unempl_rate <-
+	df |>
+	janitor::clean_names() |>
+	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01"), format = '%Y-%m-%d')) |>
+	dplyr::mutate(subject = gsub("LRHUTTTT", "Monthly unempl. rate", subject))
+#                          HOUSING                           ----
+## csushpinsa ----
+csushpinsa <- fredr::fredr(series_id = "CSUSHPINSA",
+			   observation_start = as.Date("2000-01-01"))
+csushpinsa <- csushpinsa |> dplyr::select(date, value)
+
+#                          LEADING                           ----
+## wei  ----
+fred_key <- Sys.getenv("FRED_API_KEY")
+fredr::fredr_set_key(fred_key)
+wei <- fredr::fredr(series_id = "WEI",
+		    observation_start = as.Date("2008-01-05"))
+wei <- wei |> dplyr::select(date, value)
+#                          SENTIMENT                         ----
+## umcsent ----
+umcsent <- fredr::fredr(series_id = "UMCSENT",
+			observation_start = as.Date("2000-01-01"))
+umcsent <- umcsent |> dplyr::select(date, value)
+#                            STOCKS                           ----
+## wb_wdi_mkt_cap ----
+df <- rdbnomics::rdb("WB", "WDI", dimensions = list(
+	country = c("US", "CN", "IN", "EU", "JP"),
+	indicator = "CM.MKT.LCAP.GD.ZS")
+)
+wb_wdi_mkt_cap <-
+	df |>
+	dplyr::mutate(original_period = as.integer(original_period)) |>
+	dplyr::filter(original_period > 2000) |>
+	dplyr::mutate(value = round(value, 1))
+
+#                      SAVE INTERNAL DATA                     ----
+usethis::use_data(# misc
+	us_recessions,
+	# general
+	  oecd_gdp_total,
+	  oecd_gdp_per_capita,
+	  oecd_prices_cpi,
+	  oecd_kei_unempl_rate,
+	# housing
+	  csushpinsa,
+	# leading
+	  wei,
+	# sentiment
+	  umcsent,
+	# stocks
+	  wb_wdi_mkt_cap,
+	  internal = T,
+	  overwrite = TRUE)
+#                            END                             ----
+
