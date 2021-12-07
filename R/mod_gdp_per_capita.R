@@ -18,9 +18,9 @@ mod_gdp_per_capita_ui <- function(id) {
     fluidRow(
       column(
         6,
+        tags$h3("Country:"),
         pickerInput(
           inputId = ns("location"),
-          label = "Location: ",
           choices = sort(unique(oecd_gdp_per_capita$location)),
           selected = "USA",
           multiple = T,
@@ -34,9 +34,9 @@ mod_gdp_per_capita_ui <- function(id) {
       ),
       column(
         6,
+        tags$h3("Indicator:"),
         pickerInput(
           inputId = ns("measure"),
-          label = "Measure:",
           choices = sort(unique(oecd_gdp_per_capita$measure)),
           selected = sort(unique(oecd_gdp_per_capita$measure))[1],
           multiple = F
