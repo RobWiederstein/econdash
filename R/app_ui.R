@@ -37,7 +37,8 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     ),
     shinydashboard::menuItem("Housing",
       tabName = "housing", icon = icon("home"),
-      menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home"))
+      menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home")),
+      menuSubItem("Redfin Housing Data", tabName = "rhd", icon = icon("home"))
     ),
     shinydashboard::menuItem("Leading",
       tabName = "leading", icon = icon("chart-line"),
@@ -206,6 +207,33 @@ app_ui <- function(request) {
                 mod_csushpinsa_ui("csushpinsa_ui_1"),
                 accordion(
                   id = "acc_csushpinsa",
+                  accordionItem(
+                    title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    # status = "success",
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>The S&P CoreLogic Case-Shiller U.S. National Home Price NSA Index is a composite of
+                                        single-family home price indices for the nine U.S. Census divisions
+                                        and is calculated monthly. The index seeks to measure changes in
+                                        the total value of all existing single-family housing stock. Additional
+                                        information. <a href='https://bit.ly/3klOFdK'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
+          #### Redfin Housing Data ----
+          tabItem(
+            tabName = "rhd",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Redfin National Housing Data",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = F,
+                mod_redfin_ui("redfin_ui_1"),
+                accordion(
+                  id = "acc_rhd",
                   accordionItem(
                     title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
                     # status = "success",

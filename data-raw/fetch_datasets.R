@@ -59,6 +59,22 @@ oecd_kei_unempl_rate <-
 csushpinsa <- fredr::fredr(series_id = "CSUSHPINSA",
 			   observation_start = as.Date("2000-01-01"))
 csushpinsa <- csushpinsa |> dplyr::select(date, value)
+## redfin ----
+file <- paste0('https://redfin-public-data.s3.us-west-2.amazonaws.com/',
+	       'redfin_market_tracker/us_national_market_tracker.tsv000.gz')
+df <- readr::read_tsv(file = file)
+
+redfin <-
+	df |>
+	dplyr::filter(is_seasonally_adjusted == TRUE) |>
+	dplyr::select(period_begin, property_type, median_sale_price:off_market_in_two_weeks) |>
+	tidyr::pivot_longer(cols = median_sale_price:off_market_in_two_weeks) |>
+	dplyr::mutate(property_type = tolower(property_type)) |>
+	dplyr::mutate(property_type = gsub(" ", "_", property_type)) |>
+	dplyr::rename(date = period_begin) |>
+	dplyr::filter(!grepl("mom|yoy", name)) |>
+	dplyr::mutate(value = round(value, 3)) |>
+	dplyr::arrange(date)
 
 #                          LEADING                           ----
 ## wei  ----
@@ -94,6 +110,7 @@ usethis::use_data(# misc
 	  oecd_kei_unempl_rate,
 	# housing
 	  csushpinsa,
+	  redfin,
 	# leading
 	  wei,
 	# sentiment

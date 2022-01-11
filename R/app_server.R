@@ -14,6 +14,7 @@ app_server <- function(input, output, session) {
   mod_oecd_prices_cpi_server("oecd_prices_cpi_ui_1")
   # housing
   mod_csushpinsa_server("csushpinsa_ui_1")
+  mod_redfin_server("redfin_ui_1")
   # leading
   mod_wei_server("wei_ui_1")
   # sentiment
