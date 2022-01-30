@@ -75,6 +75,49 @@ redfin <-
 	dplyr::filter(!grepl("mom|yoy", name)) |>
 	dplyr::mutate(value = round(value, 3)) |>
 	dplyr::arrange(date)
+## fmac ----
+df <- rio::import(file = 'http://www.freddiemac.com/pmms/docs/historicalweeklydata.xls',
+		  which ='Full History',
+		  range = cellranger::cell_limits(c(8, 1), c(NA, 7)),
+		  col_names = c('date',
+		  	      'fixed_30_rate',
+		  	      'fixed_30_points',
+		  	      'fixed_15_rate',
+		  	      'fixed_15_points',
+		  	      'float_arm_rate',
+		  	      'float_arm_points'
+		  ),
+		  col_types = c('date', rep('text', 6))
+)
+df.1 <- rio::import(file = 'http://www.freddiemac.com/pmms/docs/historicalweeklydata.xls',
+		    which ='1PMMS2022',
+		    range = cellranger::cell_limits(c(8, 1), c(NA, 7)),
+		    col_names = c('date',
+		    	      'fixed_30_rate',
+		    	      'fixed_30_points',
+		    	      'fixed_15_rate',
+		    	      'fixed_15_points',
+		    	      'float_arm_rate',
+		    	      'float_arm_points'
+		    ),
+		    col_types = c('date', rep('text', 6))
+)
+fmac <-
+	dplyr::bind_rows(df, df.1) |>
+	dplyr::select(c(date, contains("rate"))) |>
+	dplyr::mutate(across(-date, as.numeric)) |>
+	dplyr::mutate(across(-date, ~ round(., 3))) |>
+	tidyr::pivot_longer(-date, names_to = 'mortgage') |>
+	dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) |>
+	na.omit() |>
+	dplyr::filter(date > "2000-01-01")
+## houst ----
+df <- fredr::fredr(series_id = 'houst')
+houst <-
+	df |>
+	dplyr::select(date:value) |>
+	dplyr::filter(date > "2000-01-01") |>
+	dplyr::mutate(value = value / 1000)
 
 #                          LEADING                           ----
 ## wei  ----
@@ -83,11 +126,32 @@ fredr::fredr_set_key(fred_key)
 wei <- fredr::fredr(series_id = "WEI",
 		    observation_start = as.Date("2008-01-05"))
 wei <- wei |> dplyr::select(date, value)
+## ads business conditions index ----
+df <- rio::import(
+	file = paste0(
+		"https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/",
+		"ads/ads_index_most_current_vintage.xlsx?la=en&hash=6DF4E54DFAE3EDC347F80A80142338E7"
+	),
+	col_names = c("date", "ads_idx"),
+	col_types = c("text", "numeric")
+)
+adsidx <-
+	df |>
+	dplyr::mutate(date = as.Date(date, format = "%Y:%m:%d")) |>
+	dplyr::filter(date > "2000-01-01") |>
+	na.omit()
 #                          SENTIMENT                         ----
 ## umcsent ----
 umcsent <- fredr::fredr(series_id = "UMCSENT",
 			observation_start = as.Date("2000-01-01"))
 umcsent <- umcsent |> dplyr::select(date, value)
+## vix ----
+library(tidyquant)
+tickers <- c("^VIX", "SPY")
+df <- tidyquant::tq_get(tickers, get = 'stock.prices')
+vix <- df |>
+	dplyr::select(date, symbol, close) |>
+	dplyr::filter(symbol == "^VIX")
 #                            STOCKS                           ----
 ## wb_wdi_mkt_cap ----
 df <- rdbnomics::rdb("WB", "WDI", dimensions = list(
@@ -111,10 +175,14 @@ usethis::use_data(# misc
 	# housing
 	  csushpinsa,
 	  redfin,
+	  fmac,
+	  houst,
 	# leading
 	  wei,
+	  adsidx,
 	# sentiment
 	  umcsent,
+	  vix,
 	# stocks
 	  wb_wdi_mkt_cap,
 	  internal = T,

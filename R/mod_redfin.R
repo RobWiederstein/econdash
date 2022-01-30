@@ -60,9 +60,9 @@ mod_redfin_server <- function(id){
     output$chart1 <- renderHighchart({
       data = df_filtered()
       hc <- data |>
-        hchart("line", hcaes(x = date,
-                             y = value,
-                             group = property_type,
+        hchart("line", hcaes(x = .data$date,
+                             y = .data$value,
+                             group = .data$property_type,
         )) |>
         hc_xAxis(plotBands = us_recessions) |>
         hc_yAxis(title = list(text = input$name))

@@ -47,6 +47,21 @@ mod_overview_boxes_ui <- function(id){
                       "Case-Shiller Home Price Idx.",
                       icon = icon("credit-card"),
                       width = 3,
+                      color = "light-blue"),
+             valueBox("387,271",
+                      "Median Sale Price",
+                      icon = icon("dollar-sign"),
+                      width = 3,
+                      color = "light-blue"),
+             valueBox("3.55",
+                      "30 Year Fixed Mortgage Rate",
+                      icon = icon("percent"),
+                      width = 3,
+                      color = "light-blue"),
+             valueBox("1.7 million",
+                      "Total Housing Units Started",
+                      icon = icon("percent"),
+                      width = 3,
                       color = "light-blue")
     ),
     fluidRow(
@@ -59,6 +74,11 @@ mod_overview_boxes_ui <- function(id){
                       "Weekly Economic Idx.",
                       icon = icon("credit-card"),
                       width = 3,
+                      color = "light-blue"),
+             valueBox("-.195",
+                      "ADS Business Conditions Index",
+                      icon = icon("credit-card"),
+                      width = 3,
                       color = "light-blue")
     ),
     fluidRow(
@@ -68,7 +88,12 @@ mod_overview_boxes_ui <- function(id){
     fluidRow(class = "myrow",
              # A static infoBox
              valueBox("72.8",
-                      "Consumer Sentiment.",
+                      "Consumer Sentiment",
+                      icon = icon("credit-card"),
+                      width = 3,
+                      color = "light-blue"),
+             valueBox("27.66",
+                      "VIX Fear Gauge",
                       icon = icon("credit-card"),
                       width = 3,
                       color = "light-blue")

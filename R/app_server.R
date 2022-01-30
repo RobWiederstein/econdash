@@ -15,10 +15,14 @@ app_server <- function(input, output, session) {
   # housing
   mod_csushpinsa_server("csushpinsa_ui_1")
   mod_redfin_server("redfin_ui_1")
+  mod_fmac_mortgage_rates_server("fmac_mortgage_rates_ui_1")
+  mod_fred_housing_starts_server("fred_housing_starts_ui_1")
   # leading
   mod_wei_server("wei_ui_1")
+  mod_pfed_ads_bus_conditions_server("pfed_ads_bus_conditions_ui_1")
   # sentiment
   mod_umcsent_server("umcsent_ui_1")
+  mod_cboe_vix_server("cboe_vix_ui_1")
   # stocks
   mod_wb_wdi_mkt_cap_server("wb_wdi_mkt_cap_ui_1")
 }

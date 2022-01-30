@@ -38,15 +38,19 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     shinydashboard::menuItem("Housing",
       tabName = "housing", icon = icon("home"),
       menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home")),
-      menuSubItem("Redfin Housing Data", tabName = "rhd", icon = icon("home"))
+      menuSubItem("Redfin Housing Data", tabName = "rhd", icon = icon("home")),
+      menuSubItem("Mortgage Rates", tabName = "mr", icon = icon("home")),
+      menuSubItem("Housing Starts", tabName = "houst", icon = icon("home"))
     ),
     shinydashboard::menuItem("Leading",
       tabName = "leading", icon = icon("chart-line"),
-      menuSubItem("WEI", tabName = "wei", icon = icon("chart-line"))
+      menuSubItem("Weekly Econ Indicators", tabName = "wei", icon = icon("chart-line")),
+      menuSubItem("ADS Business Conditions", tabName = "ads", icon = icon("chart-line"))
     ),
     shinydashboard::menuItem("Sentiment",
       tabName = "sentiment", icon = icon("thermometer"),
-      menuSubItem("U. of Mich.", "uofm", icon = icon("thermometer"))
+      menuSubItem("U. of Mich.", "uofm", icon = icon("thermometer")),
+      menuSubItem("Volatility", "vix", icon = icon("thermometer"))
     ),
     shinydashboard::menuItem("Stocks",
                              tabName = "stocks", icon = icon("dollar-sign"),
@@ -248,6 +252,65 @@ app_ui <- function(request) {
               )
             )
           ),
+          #### Mortgage Rates - Freddie Mac ----
+          tabItem(
+            tabName = "mr",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Mortgage Rates - Freddie Mac",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = F,
+                mod_fmac_mortgage_rates_ui("fmac_mortgage_rates_ui_1"),
+                accordion(
+                  id = "acc_mr",
+                  accordionItem(
+                    title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    # status = "success",
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>
+                    Lenders are surveyed weekly on mortgage rates on popular
+                    loans. The survey is based on first - lien prime conventional
+                    conforming home purchase mortgages with a loan - to - value
+                    of 80 percent. Lenders are comprised of thrifts, credit unions,
+                    commercial banks and mortgage lending companies. Additional
+                    information <a href='http://www.freddiemac.com/pmms'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
+          #### Housing Starts (HOUST) ----
+          tabItem(
+            tabName = "houst",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Total U.S. Housing Starts",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = F,
+                mod_fred_housing_starts_ui("fred_housing_starts_ui_1"),
+                accordion(
+                  id = "acc_houst",
+                  accordionItem(
+                    title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    # status = "success",
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>
+                    The U.S. Census defines a 'start' as occurring when excavation begins
+                    for the footings or foundation of a building. All housing units in a
+                    multifamily building are defined as being started when this excavation
+                    begins. Beginning with data for September 1992, estimates of housing
+                    starts include units in structures being totally rebuilt on an existing
+                    foundation. Additional information
+                    <a href='https://www.census.gov/construction/nrc/index.html'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
           ### leading ----
           tabItem(tabName = "leading", "leading"),
           #### weekly economic index ----
@@ -283,6 +346,39 @@ app_ui <- function(request) {
               )
             )
           ),
+          #### Aruoba-Diebold-Scotti Business Conditions Index ----
+          tabItem(
+            tabName = "ads",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "ADS Business Conditions",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_pfed_ads_bus_conditions_ui("pfed_ads_bus_conditions_ui_1"),
+                accordion(
+                  id = "acc_ads",
+                  accordionItem(
+                    title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    # status = "success",
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>According to the Philadelphia Federal
+                    Reserve, 'the Aruoba-Diebold-Scotti business conditions
+                    index is designed to track real business conditions at high observation
+                    frequency. The index uses the following economic indicators: weekly initial
+                    jobless claims, monthly payroll employment, monthly industrial production,
+                    monthly real personal income less transfer payments, monthly real manufacturing
+                    and trade sales; and quarterly real GDP. The average value of the ADS index is
+                    zero. Progressively bigger positive values indicate progressively
+                    better-than-average conditions, whereas progressively more negative values
+                    indicate progressively worse-than-average conditions.' Additional
+                    information <a href='https://bit.ly/3ubFa6o'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
           ### sentiment  ----
           tabItem(tabName = "sentiment", "sentiment"),
           #### umcsent ----
@@ -311,6 +407,35 @@ app_ui <- function(request) {
                                              is one month behind at the author's request.  Additional
                                              information
                                              <a href='https://data.sca.isr.umich.edu/fetchdoc.php?docid=24774'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
+          #### vix ----
+          tabItem(
+            tabName = "vix",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "VIX -- Market Volatility Indicator",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_cboe_vix_ui("cboe_vix_ui_1"),
+                accordion(
+                  id = "acc_vix",
+                  accordionItem(
+                    title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>Commonly known as the <i>fear index</i> or <i> fear
+                    gauge </i>, the VIX is published by the Chicago Board of Exchange. According to the CBOE,
+                    'The VIX Index is a calculation designed
+                    to produce a measure of constant, 30-day expected volatility of the U.S. stock market, derived
+                    from real-time, mid-quote prices of S&P 500 Index (SPX) call and put options. On a global basis,
+                    it is one of the most recognized measures of volatility -- widely reported by financial media
+                    and closely followed by a variety of market participants as a daily market indicator.'
+                    Additional information <a href='https://www.cboe.com/tradable_products/vix/'>here</a>.</p>")
                   )
                 )
               )
