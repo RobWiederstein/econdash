@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom rlang .data
+#' @import highcharter
 mod_redfin_ui <- function(id){
   ns <- NS(id)
   tagList(

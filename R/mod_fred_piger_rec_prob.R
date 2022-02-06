@@ -1,4 +1,4 @@
-#' fmac_mortgage_rates UI Function
+#' fred_piger_rec_prob UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @importFrom rlang .data
 #' @import highcharter
-mod_fmac_mortgage_rates_ui <- function(id){
+mod_fred_piger_rec_prob_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidPage(
@@ -18,38 +18,38 @@ mod_fmac_mortgage_rates_ui <- function(id){
   )
 }
 
-#' fmac_mortgage_rates Server Functions
+#' fred_piger_rec_prob Server Functions
 #'
 #' @noRd
-mod_fmac_mortgage_rates_server <- function(id){
+mod_fred_piger_rec_prob_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$chart1 <- renderHighchart({
-      data = fmac
-      hc <- data |>
-        hchart("line", hcaes(x = .data$date,
-                             y = .data$value,
-                             group = .data$mortgage,
-        )) |>
+      hc <- piger_rec_prob |>
+        hchart("line",
+               hcaes(x = .data$date, y = .data$value),
+               name = "Probability",
+               tooltip = list(pointFormat = "{point.x:%m-%Y}: {point.y}%")) |>
         hc_title(
-          text = "U.S. Mortgage Rates"
+          text = "U.S. Recession Probability"
         ) |>
         hc_subtitle(
-          text = "1971 - Current"
+          text = ""
         ) |>
-        hc_caption(text = "<b>Source:</b> Freddie Mac"
+        hc_caption(text = "FRED Database"
         ) |>
         hc_xAxis(title = list(text = ''),
                  plotBands = us_recessions) |>
         hc_yAxis(title = list(text = ''),
-                 labels = list(format = "{value}%"))
+                 labels = list(format = "{value}%"),
+                 max = 100)
       hc
     })
   })
 }
 
 ## To be copied in the UI
-# mod_fmac_mortgage_rates_ui("fmac_mortgage_rates_ui_1")
+# mod_fred_piger_rec_prob_ui("fred_piger_rec_prob_ui_1")
 
 ## To be copied in the server
-# mod_fmac_mortgage_rates_server("fmac_mortgage_rates_ui_1")
+# mod_fred_piger_rec_prob_server("fred_piger_rec_prob_ui_1")

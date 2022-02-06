@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom rlang .data
+#' @import highcharter
 mod_pfed_ads_bus_conditions_ui <- function(id){
   ns <- NS(id)
   tagList(

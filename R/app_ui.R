@@ -14,7 +14,7 @@
 ## ................................................................
 
 header <- shinydashboardPlus::dashboardHeader(
-  title = "Economic Dashboard"
+  title = "U.S. Economic Dashboard"
 )
 
 ## ................................................................
@@ -28,8 +28,7 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     #overview
     shinydashboard::menuItem("Overview", tabName = "overview", icon = icon("table")),
     #general
-    shinydashboard::menuItem("General",
-      tabName = "general", icon = icon("chart-line"),
+    shinydashboard::menuItem("General", tabName = "general", icon = icon("chart-line"),
       menuSubItem("GDP total", tabName = "gdp_total", icon = icon("chart-line")),
       menuSubItem("GDP per capita", tabName = "gdp_per_capita", icon = icon("chart-line")),
       menuSubItem("Inflation", tabName = "inflation", icon = icon("chart-line")),
@@ -43,18 +42,23 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
       menuSubItem("Housing Starts", tabName = "houst", icon = icon("home"))
     ),
     shinydashboard::menuItem("Leading",
-      tabName = "leading", icon = icon("chart-line"),
-      menuSubItem("Weekly Econ Indicators", tabName = "wei", icon = icon("chart-line")),
-      menuSubItem("ADS Business Conditions", tabName = "ads", icon = icon("chart-line"))
+      tabName = "leading", icon = icon("binoculars"),
+      menuSubItem("Weekly Econ Indicators", tabName = "wei", icon = icon("binoculars")),
+      menuSubItem("ADS Business Conditions", tabName = "ads", icon = icon("binoculars")),
+      menuSubItem("Treasury Yield Curve", tabName = "tyc", icon = icon("binoculars")),
+      menuSubItem("Piger Recession Probability", tabName = "prp", icon = icon("binoculars"))
     ),
     shinydashboard::menuItem("Sentiment",
       tabName = "sentiment", icon = icon("thermometer"),
-      menuSubItem("U. of Mich.", "uofm", icon = icon("thermometer")),
+      menuSubItem("Consumer Sentiment", "umcs", icon = icon("thermometer")),
+      menuSubItem("Investor Confidence", "ymic", icon = icon("thermometer")),
+      menuSubItem("AAII Investor Sentiment", "aaii", icon = icon("thermometer")),
       menuSubItem("Volatility", "vix", icon = icon("thermometer"))
     ),
     shinydashboard::menuItem("Stocks",
                              tabName = "stocks", icon = icon("dollar-sign"),
-                             menuSubItem("Mkt. Cap % of GDP", "mktcap", icon = icon("dollar-sign"))
+                             menuSubItem("Mkt. Cap % of GDP", "mktcap", icon = icon("dollar-sign")),
+                             menuSubItem("Shiller PE Ratio", "sper", icon = icon("dollar-sign"))
     )
   )
 )
@@ -379,11 +383,73 @@ app_ui <- function(request) {
               )
             )
           ),
+          #### New York Fed Treasury Yield Curve ----
+          tabItem(
+            tabName = "tyc",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Treasury Yield Curve",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_nyfed_yield_spread_ui("nyfed_yield_spread_ui_1"),
+                accordion(
+                  id = "acc_tyc",
+                  accordionItem(
+                    title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>According to the New York Fed, 'this model uses the
+                    slope of the yield curve, or 'term spread,' to calculate the probability of a recession
+                    in the United States twelve months ahead. Here, the term spread is defined as the
+                    difference between 10-year and 3-month Treasury rates.'  One article notes that the yield
+                    curve is simple to use and significantly outperforms other indicators when looking
+                    two to six quarters ahead. Additional information <a href='https://nyfed.org/3sfJ0Js'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
+          #### Piger Recession Probability ----
+          tabItem(
+            tabName = "prp",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Piger Recession Probability",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_fred_piger_rec_prob_ui("fred_piger_rec_prob_ui_1"),
+                accordion(
+                  id = "acc_prp",
+                  accordionItem(
+                    title = HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
+                    collapsed = TRUE,
+                    HTML("<p style='font-size:20px'>According to Jeremy Piger, the 'monthly
+                         smoothed recession probabilities are calculated from a dynamic-factor
+                         Markov-switching (DFMS) model applied to four monthly coincident
+                         variables: non-farm payroll employment, the index of industrial
+                         production, real personal income excluding transfer payments, and
+                         real manufacturing and trade sales.'
+                         <br/>
+                         <br/>
+                         For interpretation, 'three
+                         consecutive months of smoothed probabilities above 80% has been a
+                         reliable signal of the start of a new recession, while three consecutive
+                         months of smoothed probabilities below 20% has been a reliable signal
+                         of the start of a new expansion.' Additional information
+                         <a href='https://bit.ly/3rkGvpZ'>here</a>.</p>")
+                  )
+                )
+              )
+            )
+          ),
           ### sentiment  ----
           tabItem(tabName = "sentiment", "sentiment"),
-          #### umcsent ----
+          #### U of Mich Consumer Sentiment ----
           tabItem(
-            tabName = "uofm",
+            tabName = "umcs",
             fluidRow(
               shinydashboardPlus::box(
                 title = "Univ. of Mich. Consumer Sentiment Survey (UMCSENT)",
@@ -409,6 +475,34 @@ app_ui <- function(request) {
                                              <a href='https://data.sca.isr.umich.edu/fetchdoc.php?docid=24774'>here</a>.</p>")
                   )
                 )
+              )
+            )
+          ),
+          #### Yale Mgmt Investor Sentiment ----
+          tabItem(
+            tabName = "ymic",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Yale Management Investor Confidence Survey",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_yale_inv_conf_survey_ui("yale_inv_conf_survey_ui_1")
+              )
+            )
+          ),
+          #### AAII Investor Sentiment ----
+          tabItem(
+            tabName = "aaii",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "AAII Investor Sentiment",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_aaii_inv_sentiment_ui("aaii_inv_sentiment_ui_1")
               )
             )
           ),
@@ -443,7 +537,7 @@ app_ui <- function(request) {
           ),
           ### stocks  ----
           tabItem(tabName = "stocks", "stocks"),
-            #### mktcap ----
+          #### mktcap ----
           tabItem(
             tabName = "mktcap",
             fluidRow(
@@ -467,6 +561,19 @@ app_ui <- function(request) {
                     Additional information <a href='https://data.worldbank.org/indicator/CM.MKT.LCAP.GD.ZS'>here</a>.</p>")
                   )
                 )
+              )
+            )
+          ),#### shiller ----
+          tabItem(
+            tabName = "sper",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Shiller PE Ratio",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_shiller_pe_ratio_ui("shiller_pe_ratio_ui_1")
               )
             )
           )

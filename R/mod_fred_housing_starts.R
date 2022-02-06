@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom rlang .data
+#' @import highcharter
 mod_fred_housing_starts_ui <- function(id){
   ns <- NS(id)
   tagList(

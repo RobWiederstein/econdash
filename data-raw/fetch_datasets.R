@@ -140,13 +140,95 @@ adsidx <-
 	dplyr::mutate(date = as.Date(date, format = "%Y:%m:%d")) |>
 	dplyr::filter(date > "2000-01-01") |>
 	na.omit()
+## nyfed yield spread ----
+file <- "https://www.newyorkfed.org/medialibrary/media/research/capital_markets/allmonth.xls"
+df <- rio::import(file = file,
+		  setclass = "tibble",
+		  which = "rec_prob",
+		  skip = 1,
+		  col_names = c('date',
+		  	      'yield_10_yr',
+		  	      'yield_03_mo',
+		  	      'yield_03_mo_bond_equiv',
+		  	      'spread',
+		  	      'rec_prob',
+		  	      'nber_rec'),
+		  col_types = c('date',
+		  	      rep('numeric', 6))
+)
+
+yield_spread <-
+	df |>
+	dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) |>
+	dplyr::filter(date > "2000-01-01") |>
+	na.omit() |>
+	dplyr::mutate(rec_prob = round(rec_prob * 100, 1)) |>
+	dplyr::select(date, rec_prob, spread) |>
+	tidyr::pivot_longer(-date, names_to = "variable",
+			    values_to = "value") |>
+	na.omit()
+## Piger Smoothed Recession Probabilities ----
+df <- fredr::fredr(series_id = 'RECPROUSM156N')
+piger_rec_prob <-
+	df |>
+	dplyr::select(date:value) |>
+	dplyr::filter(date > "2000-01-01") |>
+	na.omit()
 #                          SENTIMENT                         ----
 ## umcsent ----
 umcsent <- fredr::fredr(series_id = "UMCSENT",
 			observation_start = as.Date("2000-01-01"))
 umcsent <- umcsent |> dplyr::select(date, value)
+## ymics ----
+file <- paste0(
+	"https://shiller-data-public.s3.amazonaws.com/",
+	"icf_stock_market_confidence_index_table.csv"
+)
+df <- readr::read_csv(
+	file = file,
+	skip = 2,
+	col_names = c(
+		"date",
+		"institutional",
+		"inst_se",
+		"individual",
+		"ind_se"
+	),
+	col_select = c(1, 2, 4),
+	col_types = readr::cols_only(
+		date = readr::col_date(format = "%m/%Y"),
+		institutional = readr::col_number(),
+		individual = readr::col_number()
+	)
+)
+yale_inv_conf_survey <-
+	df |>
+	dplyr::filter(date > "2000-01-01") |>
+	tidyr::pivot_longer(-date, names_to = "variable")
+## aaai investor sentiment spread ----
+file <- 'https://www.aaii.com/files/surveys/sentiment.xls'
+temp_file <- tempfile()
+download.file(url = file, destfile = temp_file, mode = "wb")
+df <- readxl::read_xls(path = temp_file,
+		       sheet = 'SENTIMENT',
+		       skip = 3,
+		       .name_repair = tolower)
+##
+df$month <- lubridate::floor_date(df$date, "month")
+aaii_inv_sent <-
+	df |>
+	dplyr::mutate(bull_bear_spread = bullish - bearish) |>
+	dplyr::select(date, month, bull_bear_spread) |>
+	dplyr::group_by(month) |>
+	dplyr::summarize(bull_bear_spread = mean(bull_bear_spread,na.rm = T)) |>
+	dplyr::mutate(month  = as.Date(month)) |>
+	tidyr::pivot_longer(-month,
+			    names_to = 'variable',
+			    values_to = 'percent') |>
+	dplyr::mutate(percent = percent * 100) |>
+	dplyr::filter(month > "2000-01-01") |>
+	na.omit()
 ## vix ----
-library(tidyquant)
 tickers <- c("^VIX", "SPY")
 df <- tidyquant::tq_get(tickers, get = 'stock.prices')
 vix <- df |>
@@ -164,6 +246,13 @@ wb_wdi_mkt_cap <-
 	dplyr::filter(original_period > 2000) |>
 	dplyr::mutate(value = round(value, 1))
 
+## shiller pe ratio ----
+file <- paste0('https://data.nasdaq.com/api/v3/datasets/MULTPL/SHILLER_PE_RATIO_YEAR.csv?api_key=',
+	       Sys.getenv('QUANDL_API_KEY')
+)
+df <- readr::read_csv(file = file,
+		      name_repair = tolower)
+shiller <- xts::xts(df$value, order.by = df$date)
 #                      SAVE INTERNAL DATA                     ----
 usethis::use_data(# misc
 	us_recessions,
@@ -180,11 +269,16 @@ usethis::use_data(# misc
 	# leading
 	  wei,
 	  adsidx,
+	  yield_spread,
+	  piger_rec_prob,
 	# sentiment
 	  umcsent,
+	  yale_inv_conf_survey,
+	  aaii_inv_sent,
 	  vix,
 	# stocks
 	  wb_wdi_mkt_cap,
+	  shiller,
 	  internal = T,
 	  overwrite = TRUE)
 #                            END                             ----
