@@ -6,6 +6,7 @@
 #' @importFrom shinydashboardPlus accordion
 #' @importFrom shinydashboardPlus accordionItem
 
+
 #' @noRd
 
 
@@ -14,14 +15,16 @@
 ## ................................................................
 
 header <- shinydashboardPlus::dashboardHeader(
-  title = "U.S. Economic Dashboard"
+  title = "U.S. Economic Dashboard",
+  titleWidth = 325,
+  controlbarIcon = shiny::icon("calendar")
 )
 
 ## ................................................................
 ##                          left-sidebar                         .
 ## ................................................................
 
-left_sidebar <- shinydashboardPlus::dashboardSidebar(
+left_sidebar <- shinydashboardPlus::dashboardSidebar(width = 325,
   shinydashboard::sidebarMenu(
     # Setting id makes input$tabs give the tabName of currently-selected tab
     id = "tabs",
@@ -58,7 +61,8 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(
     shinydashboard::menuItem("Stocks",
                              tabName = "stocks", icon = icon("dollar-sign"),
                              menuSubItem("Mkt. Cap % of GDP", "mktcap", icon = icon("dollar-sign")),
-                             menuSubItem("Shiller PE Ratio", "sper", icon = icon("dollar-sign"))
+                             menuSubItem("Shiller PE Ratio", "sper", icon = icon("dollar-sign")),
+                             menuSubItem("FINRA Net Margin Debt", "finmd", icon = icon("dollar-sign"))
     )
   )
 )
@@ -107,18 +111,7 @@ app_ui <- function(request) {
                 status = "primary",
                 collapsible = TRUE,
                 collapsed = F,
-                mod_gdp_total_ui("gdp_total_ui_1"),
-                accordion(
-                  id = "gdp_total",
-                  accordionItem(
-                    title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
-                    # status = "success",
-                    collapsed = TRUE,
-                    HTML("<p style='font-size:20px'>According to the OECD, 'Gross domestic product (GDP) is the standard measure
-                    of the value added created through the production of goods and services in
-                    a country during a certain period.' Additional information <a href='https://bit.ly/3klOFdK'>here</a>.</p>")
-                  )
-                )
+                mod_gdp_total_ui("gdp_total_ui_1")
               )
             )
           ),
@@ -563,7 +556,8 @@ app_ui <- function(request) {
                 )
               )
             )
-          ),#### shiller ----
+          ),
+          #### shiller ----
           tabItem(
             tabName = "sper",
             fluidRow(
@@ -574,6 +568,20 @@ app_ui <- function(request) {
                 collapsible = T,
                 collapsed = F,
                 mod_shiller_pe_ratio_ui("shiller_pe_ratio_ui_1")
+              )
+            )
+          ),
+          #### finra margin debt ----
+          tabItem(
+            tabName = "finmd",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "FINRA Net Margin Debt",
+                width = 12,
+                status = "primary",
+                collapsible = T,
+                collapsed = F,
+                mod_finra_margin_debt_ui("finra_margin_debt_ui_1")
               )
             )
           )

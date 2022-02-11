@@ -30,4 +30,10 @@ app_server <- function(input, output, session) {
   # stocks
   mod_wb_wdi_mkt_cap_server("wb_wdi_mkt_cap_ui_1")
   mod_shiller_pe_ratio_server("shiller_pe_ratio_ui_1")
+  mod_finra_margin_debt_server("finra_margin_debt_ui_1")
+  #links ----
+  ##gdpTotalLink ----
+  observeEvent(input$gdpTotalLink, {
+    updateTabItems(session, 'tabs', 'gdp_total')
+  })
 }

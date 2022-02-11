@@ -5,6 +5,7 @@ Authors@R: person('Rob', 'Wiederstein', email = 'rob@robwiederstein.org', role =
 Description: The dashboard includes important economic indicators for the US economy.
 License: MIT + file LICENSE
 Imports: 
+    assertive,
     attempt,
     config (>= 0.3.1),
     dplyr,
@@ -14,6 +15,7 @@ Imports:
     golem (>= 0.3.1),
     highcharter,
     htmltools,
+    magrittr,
     processx,
     rlang,
     shiny (>= 1.7.1),

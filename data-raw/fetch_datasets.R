@@ -3,6 +3,14 @@
 ## us_recessions ----
 file <- 'http://data.nber.org/data/cycles/business_cycle_dates.json'
 us_recessions <- rjson::fromJSON(file=file)
+df <- do.call(rbind.data.frame, us_recessions)
+colnames(df) <- c('from', 'to')
+us_recessions <-
+	df |>
+	dplyr::transmute(from = highcharter::datetime_to_timestamp(as.Date(from)),
+		  to = highcharter::datetime_to_timestamp(as.Date(to))) |>
+	purrr::transpose()
+
 
 #                          GENERAL                           ----
 ## oecd_gdp_total ----
@@ -253,6 +261,37 @@ file <- paste0('https://data.nasdaq.com/api/v3/datasets/MULTPL/SHILLER_PE_RATIO_
 df <- readr::read_csv(file = file,
 		      name_repair = tolower)
 shiller <- xts::xts(df$value, order.by = df$date)
+## finra margin amount ----
+file <- 'https://www.finra.org/sites/default/files/2021-03/margin-statistics.xlsx'
+df <- rio::import(file = file,
+		  skip = 1,
+		  .name_repair = janitor::make_clean_names,
+		  col_names = c("date", "debit_margin",
+		  	      'credit_cash', 'credit_margin'))
+finra_margin_debt <-
+	df |>
+	dplyr::mutate(date = as.Date(paste0(date, '-01'))) |>
+	dplyr::mutate(net_margin = debit_margin - (credit_cash + credit_margin)) |>
+	dplyr::mutate(net_margin = net_margin / 1000) |>
+	dplyr::select(date, net_margin)  |>
+	na.omit()
+# SAMPLE DATASETS FOR PROVING FUNCTIONS ----
+pos_data_set <- data.frame(
+  date = as.Date(c(
+    "2020-01-01",
+    "2020-02-01",
+    "2020-03-01"
+  )),
+  value = c(1, 1.1, 1.2)
+)
+neg_data_set <- data.frame(
+	date = as.Date(c(
+		"2020-01-01",
+		"2020-02-01",
+		"2020-03-01"
+	)),
+	value = c(1, 1.1, 1.0)
+)
 #                      SAVE INTERNAL DATA                     ----
 usethis::use_data(# misc
 	us_recessions,
@@ -279,7 +318,13 @@ usethis::use_data(# misc
 	# stocks
 	  wb_wdi_mkt_cap,
 	  shiller,
+	  finra_margin_debt,
+	# function data
+	  pos_data_set,
+	  neg_data_set,
 	  internal = T,
 	  overwrite = TRUE)
+
+
 #                            END                             ----
 
