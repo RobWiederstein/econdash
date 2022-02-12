@@ -37,13 +37,16 @@ mod_gdp_total_ui <- function(id) {
       ),
       h2("About"),
       hr(),
-      p('According to the OECD, Gross domestic product (GDP) is the standard measure of the value added created through the production of goods and services in a country during a certain period.'),
+      HTML("According to the OECD, Gross domestic product (GDP) is the standard measure of the value added created through the production of goods and services in a country during a certain period. GDP as a measure of overall economic success is frequently criticized.  The OECD noted, \"it falls short of providing a suitable measure of people's material well-being for which alternative indicators may be more appropriate.\" More information can be found on the OECD  <a href='https://data.oecd.org/gdp/gross-domestic-product-gdp.htm'>webpage</a>."),
       h2("Research"),
       hr(),
-      HTML(""),
+      HTML("<a href='https://www.degruyter.com/document/doi/10.1515/9781400873630/html'>Coyle, Diane. GDP: A Brief but Affectionate History, Princeton: Princeton University Press, 2015. https://doi.org/10.1515/9781400873630</a>"),
+      h2("Frequency"),
+      hr(),
+      HTML("Published monthly."),
       h2("Citation"),
       hr(),
-      p('')
+      p('OECD (2022), Gross domestic product (GDP) (indicator). doi: 10.1787/dc2f7aec-en (Accessed on 11 February 2022)')
     )
   )
 }
