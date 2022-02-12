@@ -23,12 +23,14 @@ dataframe must have at least two columns: one named 'date' and the
 }
 \examples{
 \dontrun{
+# positive result
+pos_data_set <- data.frame(date = as.Date(c("2020-01-01",
+"2020-02-01", "2020-03-01" )), value = c(1, 1.1, 1.2))
+# negative result
+neg_data_set <- data.frame(date = as.Date(c(
+"2020-01-01", "2020-02-01", "2020-03-01")), value = c(1, 1.1, 1.0))
+
 chg2pct(pos_data_set)
 chg2pct(neg_data_set)
-# fail
-chg2pct("a")
-chg2pct(data.frame(a = c(1, 2)))
-chg2pct(data.frame(a = 1, b = 1))
-chg2pct(data.frame(a = c(1, 2), b = c(1, 2)))
 }
 }
