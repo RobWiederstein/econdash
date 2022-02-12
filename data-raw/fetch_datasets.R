@@ -275,23 +275,7 @@ finra_margin_debt <-
 	dplyr::mutate(net_margin = net_margin / 1000) |>
 	dplyr::select(date, net_margin)  |>
 	na.omit()
-# SAMPLE DATASETS FOR PROVING FUNCTIONS ----
-pos_data_set <- data.frame(
-  date = as.Date(c(
-    "2020-01-01",
-    "2020-02-01",
-    "2020-03-01"
-  )),
-  value = c(1, 1.1, 1.2)
-)
-neg_data_set <- data.frame(
-	date = as.Date(c(
-		"2020-01-01",
-		"2020-02-01",
-		"2020-03-01"
-	)),
-	value = c(1, 1.1, 1.0)
-)
+
 #                      SAVE INTERNAL DATA                     ----
 usethis::use_data(# misc
 	us_recessions,
