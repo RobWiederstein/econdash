@@ -36,4 +36,8 @@ app_server <- function(input, output, session) {
   observeEvent(input$gdpTotalLink, {
     updateTabItems(session, 'tabs', 'gdp_total')
   })
+  ##gdpPerCapitaLink ----
+  observeEvent(input$gdpPerCapitaLink, {
+    updateTabItems(session, 'tabs', 'gdp_per_capita')
+  })
 }
