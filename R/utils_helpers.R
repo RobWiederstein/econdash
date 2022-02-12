@@ -13,13 +13,15 @@
 #'
 #' @examples
 #' \dontrun{
+#' # positive result
+#' pos_data_set <- data.frame(date = as.Date(c("2020-01-01",
+#' "2020-02-01", "2020-03-01" )), value = c(1, 1.1, 1.2))
+#' # negative result
+#' neg_data_set <- data.frame(date = as.Date(c(
+#' "2020-01-01", "2020-02-01", "2020-03-01")), value = c(1, 1.1, 1.0))
+#'
 #' chg2pct(pos_data_set)
 #' chg2pct(neg_data_set)
-#' # fail
-#' chg2pct("a")
-#' chg2pct(data.frame(a = c(1, 2)))
-#' chg2pct(data.frame(a = 1, b = 1))
-#' chg2pct(data.frame(a = c(1, 2), b = c(1, 2)))
 #' }
 chg2pct <- function(df) {
 	assertive::assert_is_data.frame(df)
@@ -48,4 +50,69 @@ chg2pct <- function(df) {
 	} else {
 		stop("Divisor was '0'")
 	}
+}
+#' Return an arrow icon for valueBox
+#'
+#' Takes a value and returns an up arrow if positive, a down arrow if
+#' negative, and a horizontal arrows for zero.
+#'
+#' @param number a number
+#'
+#' @return arrow icon for valueBox
+#'
+#' @details
+#'
+#' For the arguments for valueBox, query `?shinydashboard::valueBox`.
+#'
+#'
+#' @examples
+#' \dontrun{
+#' arrow_direction(number = 0)
+#' arrow_direction(number = 1)
+#' arrow_direction(number = -1)
+#' arrow_direction(number = NA)
+#'}
+#'
+insert_arrow <- function(number = 0){
+	assertive::assert_is_numeric(number)
+	icon = if(number > 0){
+		icon('arrow-up')
+	}else if(number < 0){
+		icon('arrow-down')
+	}else{
+		icon('arrows-alt-h')
+	}
+	icon
+}
+#' Return a color for valueBox
+#'
+#' Takes a value and returns the color 'green' if positive, the
+#' color 'red', if negative, and the color 'blue' for anything else.
+#'
+#' @param number a number
+#'
+#' @return a color for valueBox
+#'
+#' @details
+#'
+#' For the arguments for valueBox, query `?shinydashboard::valueBox`.
+#'
+#' @examples
+#' \dontrun{
+#' color_box(number = 0)
+#' color_box(number = 1)
+#' color_box(number = -1)
+#' color_box(number = NA)
+#'}
+color_box <- function(number = 0){
+	assertive::assert_is_numeric(number)
+color =
+	if(number > 0){
+		"green"
+	}else if(number < 0){
+		"red"
+	}else{
+		"blue"
+	}
+color
 }
