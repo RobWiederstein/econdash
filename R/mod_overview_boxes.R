@@ -21,12 +21,8 @@ mod_overview_boxes_ui <- function(id) {
       class = "myrow",
       valueBoxOutput(ns("gdp_total"), width = 3),
     ## gdp per capita ----
-      shinydashboard::valueBox("58,298",
-        "Per Capita GDP: USA",
-        icon = icon("dollar-sign"),
-        width = 3,
-        color = "blue"
-      ),
+      valueBoxOutput(ns("gdp_per_capita"), width = 3),
+    ## inflation ----
       valueBox("6.2%",
         "Infl. all item: USA",
         icon = icon("percent"),
@@ -174,11 +170,11 @@ mod_overview_boxes_server <- function(id) {
     output$gdp_total <- renderValueBox({
       usa_latest_change <-
         oecd_gdp_total |>
-          dplyr::arrange(obs_time) |>
-          dplyr::filter(location == 'USA') |>
+          dplyr::arrange(.data$obs_time) |>
+          dplyr::filter(.data$location == 'USA') |>
           dplyr::slice_tail(n = 2) |>
-          dplyr::select(obs_time, location, obs_value) |>
-          dplyr::rename(date = obs_time, value = obs_value)
+          dplyr::select(.data$obs_time, .data$location, .data$obs_value) |>
+          dplyr::rename(date = .data$obs_time, value = .data$obs_value)
       usa_latest_gdp <-
         usa_latest_change |>
           dplyr::slice(which.max(usa_latest_change$date)) |>
@@ -192,17 +188,43 @@ mod_overview_boxes_server <- function(id) {
                              "% <br/>",
                              'Last: ',
                              max(usa_latest_change$date)))
-      icon = if(chg2pct(usa_latest_change) > 0){
-        icon('arrow-up')
-      }else if(chg2pct(usa_latest_change) < 0){
-        icon('arrow-down')
-      }else{
-        icon('arrows-h')
-      }
+      icon = insert_arrow(chg2pct(usa_latest_change))
+      color = color_box(chg2pct(usa_latest_change))
       valueBox(value = value,
                subtitle = subtitle,
                icon = icon,
-               color = "blue"
+               color = color
+      )
+    })
+    ## gdp per capita ----
+    output$gdp_per_capita <- renderValueBox({
+    usa_latest_change <-
+      oecd_gdp_per_capita |>
+      dplyr::arrange(.data$obs_time) |>
+      dplyr::filter(.data$location == 'USA') |>
+      dplyr::slice_tail(n = 2) |>
+      dplyr::select(.data$obs_time, .data$location, .data$obs_value) |>
+      dplyr::rename(date = .data$obs_time, value = .data$obs_value)
+    usa_latest_gdp_per_capita <-
+      usa_latest_change |>
+      dplyr::slice(which.max(usa_latest_change$date)) |>
+      dplyr::pull(value) |>
+      round(0) |>
+      format(big.mark = ",")
+      value = actionLink(
+        inputId = "gdpPerCapitaLink",
+        label = div(paste0('$', usa_latest_gdp_per_capita)), style = "color: white")
+      subtitle = HTML(paste0('USA GDP Per Capita: ',
+                             chg2pct(usa_latest_change),
+                             "% <br/>",
+                             'Last: ',
+                             max(usa_latest_change$date)))
+      icon = insert_arrow(chg2pct(usa_latest_change))
+      color = color_box(chg2pct(usa_latest_change))
+      valueBox(value = value,
+               subtitle = subtitle,
+               icon = icon,
+               color = color
       )
     })
   })
