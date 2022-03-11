@@ -37,8 +37,10 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(width = 325,
       menuSubItem("Inflation", tabName = "inflation", icon = icon("chart-line")),
       menuSubItem("Unemployment", tabName = "unemployment", icon = icon("chart-line"))
     ),
-    shinydashboard::menuItem("Housing",
-      tabName = "housing", icon = icon("home"),
+    shinydashboard::menuItem("Households", tabName = "households", icon = icon("user"),
+      menuSubItem("Household Debt and Credit", tabName = "qhdc", icon = icon("user"))
+      ),
+    shinydashboard::menuItem("Housing", tabName = "housing", icon = icon("home"),
       menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home")),
       menuSubItem("Redfin Housing Data", tabName = "rhd", icon = icon("home")),
       menuSubItem("Mortgage Rates", tabName = "mr", icon = icon("home")),
@@ -106,12 +108,12 @@ app_ui <- function(request) {
             tabName = "gdp_total",
             fluidRow(
               shinydashboardPlus::box(
-                title = "OECD GDP total",
+                title = "OECD GDP Total",
                 width = 12,
                 status = "primary",
                 collapsible = TRUE,
                 collapsed = F,
-                mod_gdp_total_ui("gdp_total_ui_1")
+                mod_oecd_gdp_total_ui("gdp_total_ui_1")
               )
             )
           ),
@@ -125,18 +127,7 @@ app_ui <- function(request) {
                 status = "primary",
                 collapsible = TRUE,
                 collapsed = F,
-                mod_gdp_per_capita_ui("gdp_per_capita_ui_1"),
-                accordion(
-                  id = "gdp_per_capita",
-                  accordionItem(
-                    title =  HTML('<i class="fa fa-info-circle fa-xs" style="color:#2196f3" aria-hidden="true"></i>'),
-                    # status = "success",
-                    collapsed = TRUE,
-                    HTML("<p style='font-size:20px'>Per capita GDP is a global measure for gauging the prosperity of nations and is used by
-                         economists, along with GDP, to analyze the prosperity of a country based on its
-                         economic growth.</p>")
-                  )
-                )
+                mod_oecd_per_capita_ui("gdp_per_capita_ui_1")
               )
             )
           ),
@@ -189,6 +180,22 @@ app_ui <- function(request) {
                                         information <a href='https://bit.ly/3pyjs8T'>here</a>.</p>")
                   )
                 )
+              )
+            )
+          ),
+          ### households ----
+          tabItem(tabName = "households", "households"),
+          #### consumer debt and credit ----
+          tabItem(
+            tabName = "qhdc",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Quarterly Report of Household Debt and Credit",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = FALSE,
+                mod_nyfed_qhdc_ui("nyfed_qhdc_ui_1")
               )
             )
           ),

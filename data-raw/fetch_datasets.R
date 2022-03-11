@@ -62,6 +62,53 @@ oecd_kei_unempl_rate <-
 	janitor::clean_names() |>
 	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01"), format = '%Y-%m-%d')) |>
 	dplyr::mutate(subject = gsub("LRHUTTTT", "Monthly unempl. rate", subject))
+#                        HOUSEHOLDS                          ----
+file <- 'https://www.newyorkfed.org/medialibrary/interactives/householdcredit/data/xls/hhd_c_report_2021q4.xlsx'
+# import quarterly report of household debt and credit ----
+file_import <-
+	rio::import(file = file,
+		    sheet = 'Page 3 Data',
+		    range = cellranger::cell_limits(c(4, 1), c(NA,NA)),
+		    col_names = c(
+		    	'quarter',
+		    	'mortgage',
+		    	'heloc',
+		    	'auto_loan',
+		    	'credit_card',
+		    	'student_loan',
+		    	'other',
+		    	'total'
+		    ),
+		    col_types = c("text", rep("numeric", 7))
+	)
+# build df----
+qhdc <-
+	file_import |>
+	dplyr::mutate(quarter = as.Date(zoo::as.yearqtr(file_import$quarter, format = "%y:Q%q"))) |>
+	dplyr::mutate(across(mortgage:total, ~round(.x, 4))) |>
+	tidyr::pivot_longer(-quarter, names_to = "loan_type") |>
+	dplyr::filter(loan_type != "total") |>
+	tidyr::drop_na()
+# adjust for inflation ----
+qhdc.1 <-
+	qhdc |>
+	dplyr::mutate(infl_adj_2020 =
+	       	priceR::afi(
+	       		price = qhdc$value,
+	       		from_date = qhdc$quarter,
+	       		country = "US",
+	       		to_date = "2020-01-01"
+	       	)) |>
+	dplyr::mutate(infl_adj_2020 = round(infl_adj_2020, 2))
+# pivot wider ----
+nyfed_qhdc <-
+	qhdc.1 |>
+	dplyr::select(-value) |>
+	tidyr::pivot_wider(
+		id_cols = quarter,
+		names_from = loan_type,
+		values_from = infl_adj_2020
+	)
 #                          HOUSING                           ----
 ## csushpinsa ----
 csushpinsa <- fredr::fredr(series_id = "CSUSHPINSA",
@@ -284,6 +331,8 @@ usethis::use_data(# misc
 	  oecd_gdp_per_capita,
 	  oecd_prices_cpi,
 	  oecd_kei_unempl_rate,
+	# households
+	  nyfed_qhdc,
 	# housing
 	  csushpinsa,
 	  redfin,
@@ -303,9 +352,6 @@ usethis::use_data(# misc
 	  wb_wdi_mkt_cap,
 	  shiller,
 	  finra_margin_debt,
-	# function data
-	  pos_data_set,
-	  neg_data_set,
 	  internal = T,
 	  overwrite = TRUE)
 
