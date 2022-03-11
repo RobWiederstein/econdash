@@ -36,10 +36,27 @@ mod_overview_boxes_ui <- function(id) {
         color = "blue"
       )
     ),
+    # households ----
     fluidRow(
-      tags$h2("Housing"), # housing ----
+      tags$h2("Households"),
       tags$hr()
     ),
+    ## avg consumer debt ----
+    fluidRow(
+      class = "myrow",
+      valueBox("$44,000",
+               "Average consumer debt",
+               icon = icon("credit-card"),
+               width = 3,
+               color = "blue"
+      )
+    ),
+    # housing ----
+    fluidRow(
+      tags$h2("Housing"),
+      tags$hr()
+    ),
+    ## case-shiller ----
     fluidRow(
       class = "myrow",
       valueBox("271",
@@ -48,18 +65,21 @@ mod_overview_boxes_ui <- function(id) {
         width = 3,
         color = "blue"
       ),
+    ## median sale price ----
       valueBox("387,271",
         "Median Sale Price",
         icon = icon("dollar-sign"),
         width = 3,
         color = "blue"
       ),
+    ## mortgage rates ----
       valueBox("3.55",
         "30 Year Fixed Mortgage Rate",
         icon = icon("percent"),
         width = 3,
         color = "blue"
       ),
+    ## units started ----
       valueBox("1.7 million",
         "Total Housing Units Started",
         icon = icon("percent"),
@@ -67,10 +87,12 @@ mod_overview_boxes_ui <- function(id) {
         color = "blue"
       )
     ),
+    # leading ----
     fluidRow(
-      tags$h2("Leading"), # leading ----
+      tags$h2("Leading"),
       tags$hr()
     ),
+    ## weekly economic idx -----
     fluidRow(
       class = "myrow",
       valueBox("7.65",
@@ -79,18 +101,21 @@ mod_overview_boxes_ui <- function(id) {
         width = 3,
         color = "blue"
       ),
+    ## ADS Bus conditions ----
       valueBox("-.195",
         "ADS Business Conditions Index",
         icon = icon("credit-card"),
         width = 3,
         color = "blue"
       ),
+    ## yield curve ----
       valueBox("14.4%",
         "Recession Probability - Yield Curve",
         icon = icon("credit-card"),
         width = 3,
         color = "blue"
       ),
+    ## recession probability ----
       valueBox("1.82%",
         "Recession Probability - Chavet & Piger",
         icon = icon("credit-card"),
@@ -98,8 +123,9 @@ mod_overview_boxes_ui <- function(id) {
         color = "blue"
       )
     ),
+    # sentiment ----
     fluidRow(
-      tags$h2("Sentiment"), # sentiment ----
+      tags$h2("Sentiment"),
       tags$hr()
     ),
     fluidRow(
@@ -166,6 +192,7 @@ mod_overview_boxes_ui <- function(id) {
 mod_overview_boxes_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    # general ----
     ## gdp total ----
     output$gdp_total <- renderValueBox({
       usa_latest_change <-
@@ -198,19 +225,22 @@ mod_overview_boxes_server <- function(id) {
     })
     ## gdp per capita ----
     output$gdp_per_capita <- renderValueBox({
-    usa_latest_change <-
+    ### latest change ----
+      usa_latest_change <-
       oecd_gdp_per_capita |>
       dplyr::arrange(.data$obs_time) |>
       dplyr::filter(.data$location == 'USA') |>
       dplyr::slice_tail(n = 2) |>
       dplyr::select(.data$obs_time, .data$location, .data$obs_value) |>
       dplyr::rename(date = .data$obs_time, value = .data$obs_value)
+    ### latest value ----
     usa_latest_gdp_per_capita <-
       usa_latest_change |>
       dplyr::slice(which.max(usa_latest_change$date)) |>
       dplyr::pull(value) |>
       round(0) |>
       format(big.mark = ",")
+    ### value ----
       value = actionLink(
         inputId = "gdpPerCapitaLink",
         label = div(paste0('$', usa_latest_gdp_per_capita)), style = "color: white")
@@ -219,13 +249,24 @@ mod_overview_boxes_server <- function(id) {
                              "% <br/>",
                              'Last: ',
                              max(usa_latest_change$date)))
+    ### icon ----
       icon = insert_arrow(chg2pct(usa_latest_change))
       color = color_box(chg2pct(usa_latest_change))
+    ### value box ----
       valueBox(value = value,
                subtitle = subtitle,
                icon = icon,
                color = color
       )
+      # households ----
+      ## consumer debt ----
+      output$nyfed_qhcd <- renderValueBox({
+        valueBox(value = value,
+                 subtitle = subtitle,
+                 icon = icon,
+                 color = color
+        )
+      })
     })
   })
 }
