@@ -26,8 +26,9 @@ mod_wei_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
         output$wei_plot <- highcharter::renderHighchart({
-            x <- xts::xts(econdash::wei$value, econdash::wei$date)
-            highcharter::hchart(x)
+            x <- xts::xts(wei$value, wei$date)
+            highcharter::hchart(x) |>
+                hc_xAxis(plotBands = us_recessions)
         })
     })
 }

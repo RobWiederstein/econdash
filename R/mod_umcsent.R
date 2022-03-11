@@ -26,7 +26,7 @@ mod_umcsent_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$umcsent_plot <- highcharter::renderHighchart({
-      x <- xts::xts(econdash::umcsent$value, econdash::umcsent$date)
+      x <- xts::xts(umcsent$value, umcsent$date)
       highcharter::hchart(x) |>
         hc_xAxis(plotBands = us_recessions)
     })
