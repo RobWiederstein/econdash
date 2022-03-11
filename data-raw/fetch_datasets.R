@@ -101,7 +101,7 @@ qhdc.1 <-
 	       	)) |>
 	dplyr::mutate(infl_adj_2020 = round(infl_adj_2020, 2))
 # pivot wider ----
-nyfed_qhdc <-
+nyfed_qhdc_tot_debt <-
 	qhdc.1 |>
 	dplyr::select(-value) |>
 	tidyr::pivot_wider(
@@ -332,7 +332,7 @@ usethis::use_data(# misc
 	  oecd_prices_cpi,
 	  oecd_kei_unempl_rate,
 	# households
-	  nyfed_qhdc,
+	  nyfed_qhdc_tot_debt,
 	# housing
 	  csushpinsa,
 	  redfin,
