@@ -258,6 +258,7 @@ mod_overview_boxes_server <- function(id) {
                icon = icon,
                color = color
       )
+    })
       # households ----
       ## consumer debt ----
       output$nyfed_qhcd <- renderValueBox({
@@ -268,7 +269,6 @@ mod_overview_boxes_server <- function(id) {
         )
       })
     })
-  })
 }
 
 ## To be copied in the UI
