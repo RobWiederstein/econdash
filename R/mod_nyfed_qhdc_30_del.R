@@ -38,8 +38,8 @@ mod_nyfed_qhdc_30_del_server <- function(id){
     output$chart1 <- renderHighchart({
       nyfed_qhdc_30_del |>
       hchart("line",
-             hcaes(x = quarter, y = percent,
-                   group = loan_type)) |>
+             hcaes(x = .data$quarter, y = .data$percent,
+                   group = .data$loan_type)) |>
         # x axis
         hc_xAxis(title = "",
                  plotBands = us_recessions) |>

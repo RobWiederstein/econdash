@@ -265,9 +265,9 @@ mod_overview_boxes_server <- function(id) {
         ### latest change ----
         latest_change <-
           nyfed_qhdc_tot_debt |>
-          dplyr::group_by(quarter) |>
+          dplyr::group_by(.data$quarter) |>
           dplyr::rowwise() |>
-          dplyr::summarize(total = sum(mortgage:other), .groups = "drop") |>
+          dplyr::summarize(total = sum(.data$mortgage:.data$other), .groups = "drop") |>
           dplyr::arrange(.data$quarter) |>
           dplyr::slice_tail(n = 2) |>
           dplyr::select(.data$quarter, .data$total) |>
@@ -275,13 +275,13 @@ mod_overview_boxes_server <- function(id) {
         ### latest value ----
         latest_value <-
           nyfed_qhdc_tot_debt |>
-          dplyr::group_by(quarter) |>
+          dplyr::group_by(.data$quarter) |>
           dplyr::rowwise() |>
-          dplyr::summarize(total = sum(mortgage:other), .groups = "drop") |>
-          dplyr::arrange(quarter) |>
+          dplyr::summarize(total = sum(.data$mortgage:.data$other), .groups = "drop") |>
+          dplyr::arrange(.data$quarter) |>
           dplyr::slice_tail(n = 1) |>
-          dplyr::mutate(across(total, ~paste0("$", .x, "T"))) |>
-          dplyr::pull(total)
+          dplyr::mutate(across(.data$total, ~paste0("$", .x, "T"))) |>
+          dplyr::pull(.data$total)
         ### value ----
         value = actionLink(
           inputId = "nyfed_tot_debt",
