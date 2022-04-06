@@ -38,7 +38,9 @@ left_sidebar <- shinydashboardPlus::dashboardSidebar(width = 325,
       menuSubItem("Unemployment", tabName = "unemployment", icon = icon("chart-line"))
     ),
     shinydashboard::menuItem("Households", tabName = "households", icon = icon("user"),
-      menuSubItem("Household Debt and Credit", tabName = "qhdc", icon = icon("user"))
+      menuSubItem("Total Debt", tabName = "nyfed_tot_debt", icon = icon("user")),
+      menuSubItem("30 Day Delinquency", tabName = "nyfed_30_del", icon = icon("user")),
+      menuSubItem("Mortgage Credit Quality", tabName = "nyfed_mo_cs", icon = icon("user"))
       ),
     shinydashboard::menuItem("Housing", tabName = "housing", icon = icon("home"),
       menuSubItem("Housing Price Idx", tabName = "hpi", icon = icon("home")),
@@ -187,7 +189,7 @@ app_ui <- function(request) {
           tabItem(tabName = "households", "households"),
           #### consumer debt and credit ----
           tabItem(
-            tabName = "qhdc",
+            tabName = "nyfed_tot_debt",
             fluidRow(
               shinydashboardPlus::box(
                 title = "Quarterly Report of Household Debt and Credit",
@@ -196,6 +198,34 @@ app_ui <- function(request) {
                 collapsible = TRUE,
                 collapsed = FALSE,
                 mod_nyfed_qhdc_ui("nyfed_qhdc_ui_1")
+              )
+            )
+          ),
+          #### consumer 30 day delinquency ----
+          tabItem(
+            tabName = "nyfed_30_del",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Quarterly Report of Household Delinquency",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = FALSE,
+                mod_nyfed_qhdc_30_del_ui("nyfed_qhdc_30_del_ui_1")
+              )
+            )
+          ),
+          #### Mortgage Origination Volume by Credit score ----
+          tabItem(
+            tabName = "nyfed_mo_cs",
+            fluidRow(
+              shinydashboardPlus::box(
+                title = "Quarterly Report of Household Delinquency",
+                width = 12,
+                status = "primary",
+                collapsible = TRUE,
+                collapsed = FALSE,
+                mod_nyfed_qhdc_mo_cs_ui("nyfed_qhdc_mo_cs_ui_1")
               )
             )
           ),

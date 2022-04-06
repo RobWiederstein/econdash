@@ -63,8 +63,9 @@ oecd_kei_unempl_rate <-
 	dplyr::mutate(obs_time = as.Date(paste0(obs_time, "-01"), format = '%Y-%m-%d')) |>
 	dplyr::mutate(subject = gsub("LRHUTTTT", "Monthly unempl. rate", subject))
 #                        HOUSEHOLDS                          ----
+## nyfed_qhdc_tot_debt ----
+### import ----
 file <- 'https://www.newyorkfed.org/medialibrary/interactives/householdcredit/data/xls/hhd_c_report_2021q4.xlsx'
-# import quarterly report of household debt and credit ----
 file_import <-
 	rio::import(file = file,
 		    sheet = 'Page 3 Data',
@@ -81,15 +82,16 @@ file_import <-
 		    ),
 		    col_types = c("text", rep("numeric", 7))
 	)
-# build df----
+### build df----
 qhdc <-
 	file_import |>
-	dplyr::mutate(quarter = as.Date(zoo::as.yearqtr(file_import$quarter, format = "%y:Q%q"))) |>
+	dplyr::mutate(quarter = zoo::as.yearqtr(file_import$quarter, format = "%y:Q%q")) |>
+	dplyr::mutate(quarter = zoo::as.Date(quarter)) |>
 	dplyr::mutate(across(mortgage:total, ~round(.x, 4))) |>
 	tidyr::pivot_longer(-quarter, names_to = "loan_type") |>
 	dplyr::filter(loan_type != "total") |>
 	tidyr::drop_na()
-# adjust for inflation ----
+### adjust for inflation ----
 qhdc.1 <-
 	qhdc |>
 	dplyr::mutate(infl_adj_2020 =
@@ -100,7 +102,7 @@ qhdc.1 <-
 	       		to_date = "2020-01-01"
 	       	)) |>
 	dplyr::mutate(infl_adj_2020 = round(infl_adj_2020, 2))
-# pivot wider ----
+### pivot wider ----
 nyfed_qhdc_tot_debt <-
 	qhdc.1 |>
 	dplyr::select(-value) |>
@@ -109,6 +111,54 @@ nyfed_qhdc_tot_debt <-
 		names_from = loan_type,
 		values_from = infl_adj_2020
 	)
+## nyfed_qhdc_30_del ----
+### import ----
+file <- 'https://www.newyorkfed.org/medialibrary/interactives/householdcredit/data/xls/hhd_c_report_2021q4.xlsx'
+file_import <-
+	rio::import(file = file,
+		    sheet = 'Page 13 Data',
+		    range = cellranger::cell_limits(c(5, 1), c(NA, 8)),
+		    col_names = c(
+		    	'quarter',
+		    	'mortgage',
+		    	'heloc',
+		    	'auto_loan',
+		    	'credit_card',
+		    	'student_loan',
+		    	'other',
+		    	'total'
+		    ),
+		    col_types = c("text", rep("numeric", 7))
+	)
+### create df ----
+nyfed_qhdc_30_del <-
+	file_import |>
+	dplyr::mutate(quarter = zoo::as.Date(zoo::as.yearqtr(quarter, format = "%y:Q%q"))) |>
+	dplyr::mutate(across(mortgage:total, ~round(.x, 1))) |>
+	tidyr::pivot_longer(mortgage:total,
+			    names_to = "loan_type",
+			    values_to = "percent") |>
+	tidyr::drop_na()
+## nyfed_qhdc_mo_cs ----
+file <- 'https://www.newyorkfed.org/medialibrary/interactives/householdcredit/data/xls/hhd_c_report_2021q4.xlsx'
+file_import <-
+	rio::import(file = file,
+		    sheet = 'Page 6 Data',
+		    range = cellranger::cell_limits(c(5, 1), c(NA, 6)),
+		    col_names = c(
+		    	'quarter',
+		    	'<620',
+		    	'620-659',
+		    	'660-719',
+		    	'720-759',
+		    	'760+'
+		    ),
+		    col_types = c("text", rep("numeric", 5))
+	)
+nyfed_qhdc_mo_cs <-
+	file_import |>
+	dplyr::mutate(quarter = zoo::as.Date(zoo::as.yearqtr(quarter, format = "%y:Q%q"))) |>
+	tidyr::drop_na()
 #                          HOUSING                           ----
 ## csushpinsa ----
 csushpinsa <- fredr::fredr(series_id = "CSUSHPINSA",
@@ -333,6 +383,8 @@ usethis::use_data(# misc
 	  oecd_kei_unempl_rate,
 	# households
 	  nyfed_qhdc_tot_debt,
+	  nyfed_qhdc_30_del,
+	  nyfed_qhdc_mo_cs,
 	# housing
 	  csushpinsa,
 	  redfin,

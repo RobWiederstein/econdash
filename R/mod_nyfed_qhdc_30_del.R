@@ -1,4 +1,4 @@
-#' nyfed_qhdc UI Function
+#' nyfed_qhdc_30_del UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -8,7 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import highcharter
-mod_nyfed_qhdc_ui <- function(id){
+mod_nyfed_qhdc_30_del_ui <- function(id){
   ns <- NS(id)
   tagList(
     highchartOutput(ns("chart1")),
@@ -29,50 +29,27 @@ mod_nyfed_qhdc_ui <- function(id){
   )
 }
 
-#' nyfed_qhdc Server Functions
+#' nyfed_qhdc_30_del Server Functions
 #'
 #' @noRd
-mod_nyfed_qhdc_server <- function(id){
+mod_nyfed_qhdc_30_del_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     output$chart1 <- renderHighchart({
-      highchart() |>
-        hc_chart(type = "column") |>
-        hc_plotOptions(column = list(stacking = "normal")) |>
+      nyfed_qhdc_30_del |>
+      hchart("line",
+             hcaes(x = quarter, y = percent,
+                   group = loan_type)) |>
+        # x axis
+        hc_xAxis(title = "",
+                 plotBands = us_recessions) |>
         # y axis
         hc_yAxis(title = "",
-                 labels = list(format = '${value}T')) |>
-        hc_xAxis(
-          categories = nyfed_qhdc_tot_debt$quarter
-        ) |>
-        hc_add_series(
-          name="Other",
-          data = nyfed_qhdc_tot_debt$other
-        ) |>
-        hc_add_series(
-          name="Student Loan",
-          data = nyfed_qhdc_tot_debt$student_loan
-        ) |>
-        hc_add_series(
-          name="Auto Loan",
-          data = nyfed_qhdc_tot_debt$auto_loan
-        ) |>
-        hc_add_series(
-          name="Credit Card",
-          data = nyfed_qhdc_tot_debt$credit_card
-        ) |>
-        hc_add_series(name="Auto Loan",
-                      data = nyfed_qhdc_tot_debt$auto_loan
-        ) |>
-        hc_add_series(name="HELOC",
-                      data = nyfed_qhdc_tot_debt$heloc) |>
-        hc_add_series(name="Mortgage",
-                      data = nyfed_qhdc_tot_debt$mortgage
-        ) |>
+                 labels = list(format = '{value}%')) |>
         #labels
-        hc_title(text = "Consumer Debt Total by Loan Type"
+        hc_title(text = "Delinquency Rates (30+) by Loan Type"
         ) |>
-        hc_subtitle(text = "Infl. Adj 2020 Base Year"
+        hc_subtitle(text = ""
         ) |>
         hc_caption(
           text = "",
@@ -95,14 +72,18 @@ mod_nyfed_qhdc_server <- function(id){
           crosshairs = TRUE,
           backgroundColor = "#F0F0F0",
           shared = TRUE,
-          borderWidth = 5
+          borderWidth = 3,
+          table = T,
+          valueDecimals = 1,
+          valueSuffix = "%",
+          sort = T
         )
     })
   })
 }
 
 ## To be copied in the UI
-# mod_nyfed_qhdc_ui("nyfed_qhdc_ui_1")
+# mod_nyfed_qhdc_30_del_ui("nyfed_qhdc_30_del_ui_1")
 
 ## To be copied in the server
-# mod_nyfed_qhdc_server("nyfed_qhdc_ui_1")
+# mod_nyfed_qhdc_30_del_server("nyfed_qhdc_30_del_ui_1")

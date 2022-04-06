@@ -9,6 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @importFrom shinydashboard valueBox renderValueBox valueBoxOutput updateTabItems
 #' @importFrom rlang .data
+#' @import dplyr
 mod_overview_boxes_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -41,15 +42,14 @@ mod_overview_boxes_ui <- function(id) {
       tags$h2("Households"),
       tags$hr()
     ),
-    ## avg consumer debt ----
+    ## total household debt ----
     fluidRow(
       class = "myrow",
-      valueBox("$44,000",
-               "Average consumer debt",
-               icon = icon("credit-card"),
-               width = 3,
-               color = "blue"
-      )
+      valueBoxOutput(ns('nyfed_qhdc_tot_debt'), width = 3),
+    ## 30 day delinquency debt ----
+      valueBoxOutput(ns('nyfed_qhdc_30_del'), width = 3),
+    ## mortgage origination by credit score ----
+      valueBoxOutput(ns('nyfed_qhdc_mo_cs'), width = 3)
     ),
     # housing ----
     fluidRow(
@@ -260,14 +260,115 @@ mod_overview_boxes_server <- function(id) {
       )
     })
       # households ----
-      ## consumer debt ----
-      output$nyfed_qhcd <- renderValueBox({
+      ## total debt ----
+      output$nyfed_qhdc_tot_debt <- renderValueBox({
+        ### latest change ----
+        latest_change <-
+          nyfed_qhdc_tot_debt |>
+          dplyr::group_by(quarter) |>
+          dplyr::rowwise() |>
+          dplyr::summarize(total = sum(mortgage:other), .groups = "drop") |>
+          dplyr::arrange(.data$quarter) |>
+          dplyr::slice_tail(n = 2) |>
+          dplyr::select(.data$quarter, .data$total) |>
+          dplyr::rename(date = .data$quarter, value = .data$total)
+        ### latest value ----
+        latest_value <-
+          nyfed_qhdc_tot_debt |>
+          dplyr::group_by(quarter) |>
+          dplyr::rowwise() |>
+          dplyr::summarize(total = sum(mortgage:other), .groups = "drop") |>
+          dplyr::arrange(quarter) |>
+          dplyr::slice_tail(n = 1) |>
+          dplyr::mutate(across(total, ~paste0("$", .x, "T"))) |>
+          dplyr::pull(total)
+        ### value ----
+        value = actionLink(
+          inputId = "nyfed_tot_debt",
+          label = div(latest_value), style = "color: white")
+        ### subtitle ----
+        subtitle = HTML(paste0('Total Consumer Debt: ',
+                               chg2pct(latest_change),
+                               "% <br/>",
+                               'Last: ',
+                               max(latest_change$date)))
+        ### value box ----
         valueBox(value = value,
                  subtitle = subtitle,
-                 icon = icon,
-                 color = color
+                 icon = insert_arrow(chg2pct(latest_change)),
+                 color = color_box(chg2pct(latest_change))
         )
       })
+      ## 30 day delinquency ----
+      # output$nyfed_qhdc_30_del <- renderValueBox({
+      #   ### latest change ----
+      #   latest_change <-
+      #     nyfed_qhdc_30_del |>
+      #     dplyr::filter(loan_type == "total") |>
+      #     dplyr::arrange(.data$quarter) |>
+      #     dplyr::slice_tail(n = 2) |>
+      #     dplyr::select(quarter, percent) |>
+      #     dplyr::rename(date = .data$quarter, value = .data$percent)
+      #   ### latest value ----
+      #   latest_value <-
+      #     nyfed_qhdc_30_del |>
+      #     dplyr::arrange(.data$quarter) |>
+      #     dplyr::slice_tail(n = 1) |>
+      #     dplyr::mutate(across(percent, ~paste0(.x, '%'))) |>
+      #     dplyr::pull(percent)
+      #   ### value ----
+      #   value = actionLink(
+      #     inputId = "nyfed_30_del",
+      #     label = div(latest_value), style = "color: white")
+      #   ### subtitle ----
+      #   subtitle = HTML(paste0('30 day delinquency Increase: ',
+      #                          chg2pct(latest_change),
+      #                          "% <br/>",
+      #                          'Last: ',
+      #                          max(latest_change$date)))
+      #   ### value box ----
+      #   valueBox(value = value,
+      #            subtitle = subtitle,
+      #            icon = insert_arrow(chg2pct(latest_change)),
+      #            color = color_box(chg2pct(latest_change))
+      #   )
+        # ## mortgage origination by credit quality ----
+        # ### latest change ----
+        # latest_change <-
+        #   nyfed_qhdc_mo_cs |>
+        #   #dplyr::group_by(quarter) |>
+        #   dplyr::rowwise() |>
+        #   dplyr::mutate(total = sum(`<620`:`760+`)) |>
+        #   dplyr::mutate(pct_760 = `760+` / total) |>
+        #   dplyr::mutate(pct_760 = pct_760 * 100)
+        #   dplyr::arrange(.data$quarter) |>
+        #   dplyr::slice_tail(n = 2) |>
+        #   dplyr::select(.data$quarter, .data$percent) |>
+        #   dplyr::rename(date = .data$quarter, value = .data$percent)
+        # ### latest value ----
+        # latest_value <-
+        #   nyfed_qhdc_30_del |>
+        #   dplyr::arrange(.data$quarter) |>
+        #   dplyr::slice_tail(n = 1) |>
+        #   dplyr::mutate(across(percent, ~paste0(.x, '%'))) |>
+        #   dplyr::pull(percent)
+        # ### value ----
+        # value = actionLink(
+        #   inputId = "nyfed_30_del",
+        #   label = div(latest_value), style = "color: white")
+        # ### subtitle ----
+        # subtitle = HTML(paste0('30 day delinquency Increase: ',
+        #                        chg2pct(latest_change),
+        #                        "% <br/>",
+        #                        'Last: ',
+        #                        max(latest_change$date)))
+        # ### value box ----
+        # valueBox(value = value,
+        #          subtitle = subtitle,
+        #          icon = insert_arrow(chg2pct(latest_change)),
+        #          color = color_box(chg2pct(latest_change))
+        # )
+      #})
     })
 }
 
