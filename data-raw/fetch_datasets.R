@@ -341,8 +341,9 @@ vix <- df |>
 	dplyr::filter(symbol == "^VIX")
 #                            STOCKS                           ----
 ## wb_wdi_mkt_cap ----
-df <- rdbnomics::rdb("WB", "WDI", dimensions = list(
-	country = c("US", "CN", "IN", "EU", "JP"),
+df <-
+	rdbnomics::rdb("WB", "WDI", dimensions = list(
+	country = c("USA", "CHN", "IND", "EUU", "JPN"),
 	indicator = "CM.MKT.LCAP.GD.ZS")
 )
 wb_wdi_mkt_cap <-
